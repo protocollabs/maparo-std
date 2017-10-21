@@ -15,6 +15,35 @@ You can use pre-compiled releases compiled for Linux, Mac and Windows.
 - *Maparo* do not focus on collection OS internal stats for further analysis
   for now. This can later be added.
 
+## Using Maparo from Third Party Tools/Scripts Automatically
+
+Maparo will exit with return code 0 if everything went fine. If not return code 1 signals
+the script that something went wrong. To communicate error, warning and debugging
+information to the outside *maparo* will use STDERR. STDOUT is just use for analysis
+data. This a script can trust that the outputed string is a pure JSON string (if enabled)
+and not garbaged with other information.
+
+```
+maparo <args> | python3 graph-script.py -o output.png
+```
+
+## Parsing Format
+
+*Maparo* will print out the results and the input parameters as well as other
+gathered system parameters:
+
+```
+{
+  "version" = "semver value",
+  "system" = {
+  },
+  "input" " {
+  },
+  "output" : {
+  },
+}
+```
+
 ## Development
 
 ### Prepare Development Environment
