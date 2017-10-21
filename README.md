@@ -46,6 +46,12 @@ gathered system parameters:
 
 ## Development
 
+### Install binary via
+
+```
+go get github.com/protocollabs/maparo/...
+```
+
 ### Prepare Development Environment
 
 For Debian based systems install go suite:
