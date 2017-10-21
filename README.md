@@ -11,5 +11,5 @@ You can use pre-compiled releases compiled for Linux, Mac and Windows.
 For Debian based systems install go suite:
 
 ```
-sudo apt-get install
+sudo apt-get install golang-go
 ```
