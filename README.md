@@ -53,3 +53,13 @@ For Debian based systems install go suite:
 ```
 sudo apt-get install golang-go
 ```
+
+
+# Links and Referrences
+
+## Plotting Ideas
+
+- http://blog.enthought.com/general/visualizing-uncertainty/
+- https://plot.ly/python/box-plots/
+- http://jonchar.net/notebooks/matplotlib-styling/
+- http://people.duke.edu/~ccc14/pcfb/numpympl/MatplotlibBarPlots.html
