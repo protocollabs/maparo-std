@@ -12,6 +12,8 @@ You can use pre-compiled releases compiled for Linux, Mac and Windows.
 - *Maparo* return either a JSON set or human formatted data. *Maparo* do
   not draw or visualize any data. To visualize data you can use Python
   scripts using the powerful and flexible matplotlib library.
+- *Maparo* do not focus on collection OS internal stats for further analysis
+  for now. This can later be added.
 
 ## Development
 
