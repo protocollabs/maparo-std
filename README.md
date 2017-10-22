@@ -63,6 +63,10 @@ sudo apt-get install golang-go
 
 # Links and Referrences
 
+## Go Networking Examples
+
+- https://github.com/golang/net/blob/master/ipv4/example_test.go
+
 ## Plotting Ideas
 
 - http://blog.enthought.com/general/visualizing-uncertainty/
