@@ -8,11 +8,10 @@ import (
 	"github.com/protocollabs/maparo/mods"
 )
 
-
 type Mod interface {
-	Parse() (error)
-	Init(n core.ModConf) (error)
-	Start() (error)
+	Parse() error
+	Init(n core.ModConf) error
+	Start() error
 }
 
 // campaign has to provide the same functions as
@@ -20,13 +19,12 @@ type Mod interface {
 type Campaign Mod
 
 func parse_args() (string, error) {
-    if len(os.Args) > 1 {
+	if len(os.Args) > 1 {
 		return os.Args[1], nil
 	}
 
 	return "", fmt.Errorf("list or count subcommand is required")
 }
-
 
 func main() {
 	fmt.Fprintf(os.Stderr, "build version: %s\n", core.BuildVersion)
