@@ -15,6 +15,10 @@ type Mod interface {
 	Start() (error)
 }
 
+// campaign has to provide the same functions as
+// Modules. Simple typedef then
+type Campaign Mod
+
 func parse_args() (string, error) {
     if len(os.Args) > 1 {
 		return os.Args[1], nil
