@@ -1,47 +1,119 @@
 package mods
 
-import "fmt"
-import "flag"
-import "os"
-import "github.com/protocollabs/maparo/core"
+import (
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+	"os"
+	"strings"
+)
 
-type ModUdpPing struct {
-	conf core.ModConf
+type configClient struct {
+	Port   int32  `json:"port"`
+	Server string `json:"server"`
 }
 
-func (m ModUdpPing) Init(conf core.ModConf) error {
-	// save configuration
-	m.conf = conf
+func NewConfigClient() configClient {
+	return configClient{
+		Port:   6666,
+		Server: "::1",
+	}
+}
+
+type configServer struct {
+	Port int32 `json:"port"`
+}
+
+func NewConfigServer() configServer {
+	return configServer{
+		Port: 6666,
+	}
+}
+
+type modUdpPing struct {
+	mode         string
+	cli_args     map[string]string
+	configClient configClient
+	configServer configServer
+}
+
+// Default Values
+func NewModUdpPing() modUdpPing {
+	return modUdpPing{
+		cli_args:     make(map[string]string),
+		configClient: NewConfigClient(),
+		configServer: NewConfigServer(),
+	}
+}
+
+func (m modUdpPing) handleConfigFile(filename string) error {
+	raw, err := ioutil.ReadFile(filename)
+	if err != nil {
+		if os.IsNotExist(err) {
+			fmt.Fprintf(os.Stderr, "config file is not readable %s\n", filename)
+		}
+		return err
+	}
+
+	var c []configClient
+	json.Unmarshal(raw, &c)
+
 	return nil
 }
 
-func (m ModUdpPing) Start() error {
+// first, check if a config file is given, if so parse and overwrite defaults,
+// later, check for arguments, if available and valid, overwrite defaults and
+// config. Arguments has the highest precedence
+func (m modUdpPing) Init() error {
+	// check if config file is available
+	if filename, ok := m.cli_args["config"]; ok {
+		err := m.handleConfigFile(filename)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
-func (m ModUdpPing) Parse() error {
-	listCommand := flag.NewFlagSet("list", flag.ExitOnError)
+func (m modUdpPing) Start() error {
+	return nil
+}
 
-	listTextPtr := listCommand.String("text", "", "Text to parse. (Required)")
-	listMetricPtr := listCommand.String("metric", "chars", "Metric <chars|words|lines>. (Required)")
-	listUniquePtr := listCommand.Bool("unique", false, "Measure unique values of a metric.")
+func valid_option(s string) bool {
+	return strings.Contains(s, "=")
+}
 
-	listCommand.Parse(os.Args[2:])
+func is_valid_mode(s string) bool {
+	if s == "server" || s == "client" {
+		return true
+	}
+	return false
+}
 
-	if listCommand.Parsed() {
-		if *listTextPtr == "" {
-			fmt.Println("NO ARG GIBVEN")
-			listCommand.PrintDefaults()
-			return fmt.Errorf("FIXME")
+// parse simple parse command line and safe for later use
+// parse do not overwrite the defaults, this is done later
+// in init, where sanity checks are done too
+func (m modUdpPing) Parse() error {
+
+	if len(os.Args) < 3 {
+		return fmt.Errorf("moaare args required")
+	}
+
+	// must be server or client
+	mode := os.Args[2]
+	if !is_valid_mode(mode) {
+		return fmt.Errorf("not a valid mode: %s (server or client)", mode)
+	}
+	m.mode = mode
+
+	// parse arguments
+	for _, word := range os.Args[3:] {
+		ok := valid_option(word)
+		if !ok {
+			return fmt.Errorf("not a valid option: %q, must be key=val", word)
 		}
-
-		metricChoices := map[string]bool{"chars": true, "words": true, "lines": true}
-		if _, validChoice := metricChoices[*listMetricPtr]; !validChoice {
-			listCommand.PrintDefaults()
-			return fmt.Errorf("FIXME")
-		}
-
-		fmt.Printf("textPtr: %s, metricPtr: %s, uniquePtr: %t\n", *listTextPtr, *listMetricPtr, *listUniquePtr)
+		kv := strings.Split(word, "=")
+		m.cli_args[kv[0]] = kv[1]
 	}
 
 	return nil

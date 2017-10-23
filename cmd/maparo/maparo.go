@@ -11,7 +11,7 @@ import (
 
 type Mod interface {
 	Parse() error
-	Init(n core.ModConf) error
+	Init() error
 	Start() error
 }
 
@@ -29,61 +29,73 @@ func parse_args() (string, error) {
 
 func prepare_mod_map() map[string]Mod {
 	m := make(map[string]Mod)
-	m["udp-ping"] = mods.ModUdpPing{}
+	m["mod-udp-ping"] = mods.NewModUdpPing()
 	return m
 }
 
 func prepare_campaign_map() map[string]Mod {
 	m := make(map[string]Mod)
-	m["campaign-ping"] = mods.ModUdpPing{}
+	m["campaign-ping"] = mods.NewModUdpPing()
 	return m
 }
 
-func usage() {
+func usage(mm map[string]Mod, mc map[string]Mod) {
 	fmt.Fprintf(os.Stderr, "invalid arg, must be mod- or campaign-\n")
 }
 
-func mode_mod(name string) {
-	s := prepare_mod_map()
+func mode_mod(s map[string]Mod, name string) {
 	mod, ok := s[name]
 	if !ok {
 		fmt.Fprintf(os.Stderr, "not a valid module\n")
 		os.Exit(1)
 	}
-	mod.Parse()
+	err := mod.Parse()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s\n", err)
+		os.Exit(1)
+	}
+	err = mod.Init()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s\n", err)
+		os.Exit(1)
+	}
 }
 
-
-func mode_campaign(name string) {
-	s := prepare_campaign_map()
+func mode_campaign(s map[string]Mod, name string) {
 	mod, ok := s[name]
 	if !ok {
 		fmt.Fprintf(os.Stderr, "not a valid module\n")
 		os.Exit(1)
 	}
-	mod.Parse()
+	err := mod.Parse()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "%s\n", err)
+		os.Exit(1)
+	}
 }
 
 func main() {
+	fmt.Fprintf(os.Stderr, "mapago(c) - 2017\n")
 	fmt.Fprintf(os.Stderr, "build version: %s\n", core.BuildVersion)
 	fmt.Fprintf(os.Stderr, "build date:    %s\n", core.BuildDate)
 
+	mm := prepare_mod_map()
+	mc := prepare_campaign_map()
+
 	name, err := parse_args()
 	if err != nil {
-		usage()
+		usage(mm, mc)
 		os.Exit(1)
 	}
 
 	if strings.HasPrefix(name, "mod-") {
-		mode_mod(name)
+		mode_mod(mm, name)
 	} else if strings.HasPrefix(name, "campaign-") {
-		mode_campaign(name)
+		mode_campaign(mc, name)
 	} else {
-		usage()
+		usage(mm, mc)
 		os.Exit(1)
 	}
 
 	os.Exit(0)
-
-
 }
