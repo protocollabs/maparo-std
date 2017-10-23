@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/protocollabs/maparo/core"
 	"github.com/protocollabs/maparo/mods"
@@ -26,24 +27,63 @@ func parse_args() (string, error) {
 	return "", fmt.Errorf("list or count subcommand is required")
 }
 
-func main() {
-	fmt.Fprintf(os.Stderr, "build version: %s\n", core.BuildVersion)
-	fmt.Fprintf(os.Stderr, "build date:    %s\n", core.BuildDate)
+func prepare_mod_map() map[string]Mod {
+	m := make(map[string]Mod)
+	m["udp-ping"] = mods.ModUdpPing{}
+	return m
+}
 
-	mod_name, err := parse_args()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "no valid mod gievn\n")
-		os.Exit(1)
-	}
+func prepare_campaign_map() map[string]Mod {
+	m := make(map[string]Mod)
+	m["campaign-ping"] = mods.ModUdpPing{}
+	return m
+}
 
-	s := make(map[string]Mod)
-	s["udp-ping"] = mods.ModUdpPing{}
+func usage() {
+	fmt.Fprintf(os.Stderr, "invalid arg, must be mod- or campaign-\n")
+}
 
-	mod, ok := s[mod_name]
+func mode_mod(name string) {
+	s := prepare_mod_map()
+	mod, ok := s[name]
 	if !ok {
 		fmt.Fprintf(os.Stderr, "not a valid module\n")
 		os.Exit(1)
 	}
 	mod.Parse()
+}
+
+
+func mode_campaign(name string) {
+	s := prepare_campaign_map()
+	mod, ok := s[name]
+	if !ok {
+		fmt.Fprintf(os.Stderr, "not a valid module\n")
+		os.Exit(1)
+	}
+	mod.Parse()
+}
+
+func main() {
+	fmt.Fprintf(os.Stderr, "build version: %s\n", core.BuildVersion)
+	fmt.Fprintf(os.Stderr, "build date:    %s\n", core.BuildDate)
+
+	name, err := parse_args()
+	if err != nil {
+		usage()
+		os.Exit(1)
+	}
+
+	if strings.HasPrefix(name, "mod-") {
+		mode_mod(name)
+	} else if strings.HasPrefix(name, "campaign-") {
+		mode_campaign(name)
+	} else {
+		usage()
+		os.Exit(1)
+	}
+
+	os.Exit(0)
+
 
 }
