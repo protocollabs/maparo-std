@@ -24,7 +24,7 @@ func parse_args() (string, error) {
 		return os.Args[1], nil
 	}
 
-	return "", fmt.Errorf("subcommand is required")
+	return "", fmt.Errorf("list or count subcommand is required")
 }
 
 func usage() {
@@ -51,7 +51,7 @@ func mode_mod(name string) {
 		os.Exit(0)
 	}
 
-	var mod *Mod
+	var mod Mod
 	if name == "mod-udp-ping" {
 		if mode == "client" {
 			mod = mods.NewModUdpPingClient()

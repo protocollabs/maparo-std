@@ -86,6 +86,11 @@ func (m *modUdpPingClient) Init() error {
 		m.configOverwriteByUserConf(config)
 	}
 
+	// overwrite based on args
+	for k, v := range m.cli_args {
+		fmt.Fprintf(os.Stderr, "%+v %+v\n", k, v)
+	}
+
 	// before we start we print the final config, if request
 	if m.verbose {
 		fmt.Fprintf(os.Stdout, "Final Config:\n")
