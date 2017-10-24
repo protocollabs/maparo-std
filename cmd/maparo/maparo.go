@@ -29,13 +29,13 @@ func parse_args() (string, error) {
 
 func prepare_mod_map() map[string]Mod {
 	m := make(map[string]Mod)
-	m["mod-udp-ping"] = mods.NewModUdpPing()
+	m["mod-udp-ping-client"] = mods.NewModUdpPingClient()
 	return m
 }
 
 func prepare_campaign_map() map[string]Mod {
 	m := make(map[string]Mod)
-	m["campaign-ping"] = mods.NewModUdpPing()
+	m["campaign-ping"] = mods.NewModUdpPingClient()
 	return m
 }
 

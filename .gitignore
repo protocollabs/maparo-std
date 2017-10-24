@@ -2,3 +2,5 @@ maparo
 !cmd/maparo
 
 release/
+
+*.swp

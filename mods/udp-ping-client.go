@@ -20,33 +20,21 @@ func NewConfigClient() configClient {
 	}
 }
 
-type configServer struct {
-	Port int32 `json:"port"`
-}
-
-func NewConfigServer() configServer {
-	return configServer{
-		Port: 6666,
-	}
-}
-
-type modUdpPing struct {
+type modUdpPingClient struct {
 	mode         string
 	cli_args     map[string]string
 	configClient configClient
-	configServer configServer
 }
 
 // Default Values
-func NewModUdpPing() modUdpPing {
-	return modUdpPing{
+func NewModUdpPingClient() modUdpPingClient {
+	return modUdpPingClient{
 		cli_args:     make(map[string]string),
 		configClient: NewConfigClient(),
-		configServer: NewConfigServer(),
 	}
 }
 
-func (m modUdpPing) handleConfigFile(filename string) error {
+func (m modUdpPingClient) handleConfigFile(filename string) error {
 	raw, err := ioutil.ReadFile(filename)
 	if err != nil {
 		if os.IsNotExist(err) {
@@ -64,7 +52,7 @@ func (m modUdpPing) handleConfigFile(filename string) error {
 // first, check if a config file is given, if so parse and overwrite defaults,
 // later, check for arguments, if available and valid, overwrite defaults and
 // config. Arguments has the highest precedence
-func (m modUdpPing) Init() error {
+func (m modUdpPingClient) Init() error {
 	// check if config file is available
 	if filename, ok := m.cli_args["config"]; ok {
 		err := m.handleConfigFile(filename)
@@ -75,7 +63,7 @@ func (m modUdpPing) Init() error {
 	return nil
 }
 
-func (m modUdpPing) Start() error {
+func (m modUdpPingClient) Start() error {
 	return nil
 }
 
@@ -93,7 +81,7 @@ func is_valid_mode(s string) bool {
 // parse simple parse command line and safe for later use
 // parse do not overwrite the defaults, this is done later
 // in init, where sanity checks are done too
-func (m modUdpPing) Parse() error {
+func (m modUdpPingClient) Parse() error {
 
 	if len(os.Args) < 3 {
 		return fmt.Errorf("moaare args required")
