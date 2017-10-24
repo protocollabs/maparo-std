@@ -24,31 +24,44 @@ func parse_args() (string, error) {
 		return os.Args[1], nil
 	}
 
-	return "", fmt.Errorf("list or count subcommand is required")
+	return "", fmt.Errorf("subcommand is required")
 }
 
-func prepare_mod_map() map[string]Mod {
-	m := make(map[string]Mod)
-	m["mod-udp-ping-client"] = mods.NewModUdpPingClient()
-	return m
-}
-
-func prepare_campaign_map() map[string]Mod {
-	m := make(map[string]Mod)
-	m["campaign-ping"] = mods.NewModUdpPingClient()
-	return m
-}
-
-func usage(mm map[string]Mod, mc map[string]Mod) {
+func usage() {
 	fmt.Fprintf(os.Stderr, "invalid arg, must be mod- or campaign-\n")
 }
 
-func mode_mod(s map[string]Mod, name string) {
-	mod, ok := s[name]
-	if !ok {
-		fmt.Fprintf(os.Stderr, "not a valid module\n")
-		os.Exit(1)
+func is_valid_mode(s string) bool {
+	if s == "server" || s == "client" {
+		return true
 	}
+	return false
+}
+
+func mode_mod(name string) {
+	if len(os.Args) < 3 {
+		fmt.Fprintf(os.Stderr, "moaare args required")
+		os.Exit(0)
+	}
+
+	// must be server or client
+	mode := os.Args[2]
+	if !is_valid_mode(mode) {
+		fmt.Fprintf(os.Stderr, "not a valid mode: %s (server or client)", mode)
+		os.Exit(0)
+	}
+
+	var mod *Mod
+	if name == "mod-udp-ping" {
+		if mode == "client" {
+			mod = mods.NewModUdpPingClient()
+		} else {
+			panic("fixme: implement me")
+		}
+	} else {
+		panic("fixme: implement me")
+	}
+
 	err := mod.Parse()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
@@ -61,39 +74,23 @@ func mode_mod(s map[string]Mod, name string) {
 	}
 }
 
-func mode_campaign(s map[string]Mod, name string) {
-	mod, ok := s[name]
-	if !ok {
-		fmt.Fprintf(os.Stderr, "not a valid module\n")
-		os.Exit(1)
-	}
-	err := mod.Parse()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s\n", err)
-		os.Exit(1)
-	}
-}
-
 func main() {
 	fmt.Fprintf(os.Stderr, "mapago(c) - 2017\n")
 	fmt.Fprintf(os.Stderr, "build version: %s\n", core.BuildVersion)
 	fmt.Fprintf(os.Stderr, "build date:    %s\n", core.BuildDate)
 
-	mm := prepare_mod_map()
-	mc := prepare_campaign_map()
-
 	name, err := parse_args()
 	if err != nil {
-		usage(mm, mc)
+		usage()
 		os.Exit(1)
 	}
 
 	if strings.HasPrefix(name, "mod-") {
-		mode_mod(mm, name)
+		mode_mod(name)
 	} else if strings.HasPrefix(name, "campaign-") {
-		mode_campaign(mc, name)
+		//mode_campaign(name)
 	} else {
-		usage(mm, mc)
+		usage()
 		os.Exit(1)
 	}
 
