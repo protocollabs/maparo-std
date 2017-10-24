@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -27,6 +28,23 @@ func (m *modUdpPingClient) configOverwriteByUserConf(user config) {
 	}
 	if user.Port != 0 {
 		m.config.Port = user.Port
+	}
+}
+
+func (m *modUdpPingClient) configOverwriteByArgsConf() {
+	// overwrite based on args
+	for k, v := range m.cli_args {
+		fmt.Fprintf(os.Stderr, "%+v     %+v\n", k, v)
+		if k == "addr" {
+			m.config.Addr = v
+		}
+		if k == "port" {
+			val, err := strconv.ParseUint(v, 0, 16)
+			if err != nil {
+				panic("to large for port")
+			}
+			m.config.Port = uint16(val)
+		}
 	}
 }
 
@@ -86,10 +104,7 @@ func (m *modUdpPingClient) Init() error {
 		m.configOverwriteByUserConf(config)
 	}
 
-	// overwrite based on args
-	for k, v := range m.cli_args {
-		fmt.Fprintf(os.Stderr, "%+v %+v\n", k, v)
-	}
+	m.configOverwriteByArgsConf()
 
 	// before we start we print the final config, if request
 	if m.verbose {
