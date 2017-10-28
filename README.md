@@ -37,7 +37,11 @@ gathered system parameters:
   "version" = "semver value",
   "system" = {
   },
-  "input" " {
+  "input" = {
+    "mod-tcp-goodput" = {
+    },
+    "mod-udp-beacon" = {
+    },
   },
   "output" : {
   },
