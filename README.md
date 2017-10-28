@@ -38,9 +38,11 @@ gathered system parameters:
   "system" = {
   },
   "input" = {
+    // flaten config, if only one module is
+    // used the module config including name is
+    // printed. If a campaign is used the serialized
+    // campaign included config values is printed 
     "mod-tcp-goodput" = {
-    },
-    "mod-udp-beacon" = {
     },
   },
   "output" : {
