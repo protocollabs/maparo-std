@@ -11,6 +11,13 @@ maparo mod udp-rtt server config.port=8888
 
 maparo mod-config udp-rtt server dst=10
 
+Read config, overwrite defaults, read args overwrite existing args - in this
+order.
+
+```
+maparo mod-udp-ping client --verbose config=config-udp-ping.json addr=1.1.1.1
+```
+
 To print udp-rtt server config as JSON file to STDOUT
 
 
@@ -21,6 +28,7 @@ Campaign rrul client:
 
 [ delay:0.0, mod:udp-rtt, config.dst=$DST ]
 [ delay:1.0, mod:udp-goodput, config.dst=$DST ]
+
 
 
 
