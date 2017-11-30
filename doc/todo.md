@@ -1,10 +1,53 @@
+# Command Line Interface
 
-maparo mod-udp-rtt --mode server --port 8888
-maparo mod-udp-rtt --mode client --dst 1.1.1.1 --port 8888
+## Syntax
+
+Work in Progress
+
+```
+maparo <"module" | "campaign"> <name> <"client" | "server"> [<options>]
+```
+
+## Examples
+
+```
+maparo mod udp-rtt server config.port=8888
+maparo mod udp-rtt client config.dst=1.1.1.1 config.port=8888
+```
+
+Print config values:
+
+```
+maparo mod udp-rtt client config-dump
+```
+
+To print help message about udp-rtt and links
+to further information about client and server configs
+
+```
+maparo mod udp-rtt help
+```
 
 
+To print all command line argument and examples for client mode
+
+```
+maparo mod udp-rtt client help
+```
+
+
+Human readable or machine readable output (default human)
+
+```
+maparo mod udp-rtt client format=json config.dst=9.9.9.9
+maparo mod udp-rtt client format=human config.dst=9.9.9.9
+```
+
+
+```
 maparo mod udp-rtt server config.port=8888
 ^^^^^^^^^^^^^^^^^^^^^^^^^
+```
 - This has a pre-defined config
 - mods comes as pairs, for client and server, always
 
@@ -21,8 +64,8 @@ maparo mod-udp-ping client --verbose config=config-udp-ping.json addr=1.1.1.1
 To print udp-rtt server config as JSON file to STDOUT
 
 
-maparo campaign-rrul server
-maparo campaign-rrul client config.dst=::1
+maparo campaign rrul server
+maparo campaign rrul client config.dst=::1
 
 Campaign rrul client:
 
