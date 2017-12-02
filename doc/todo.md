@@ -21,6 +21,15 @@ Print config values:
 maparo mod udp-rtt client config-dump
 ```
 
+
+Read config values from file:
+
+```
+maparo mod udp-rtt client config-read=/tmp/udp-rtt-client.json
+```
+
+
+
 To print help message about udp-rtt and links
 to further information about client and server configs
 
