@@ -4,6 +4,9 @@
 
 You can use pre-compiled releases compiled for Linux, Mac and Windows.
 
+> Note: the feature set is not identical on all platforms. The module
+> help describe all pitfalls.
+
 ## Design Principles
 
 - Modules can be used in parallel with other modules. Modules can be initiated
