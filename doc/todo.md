@@ -86,6 +86,12 @@ Campaign rrul client:
 
 # Control Plane
 
+Maparo without arguments open up a control channel.
+There are more use cases where a control channel is
+possible as without. Exceptions are multicast modules.
+
+
+
 maparo remote --key secret
 
 # remote means that the other peer must operate in
@@ -99,6 +105,9 @@ maparo remote --key secret
 # it is used as the encryption and prevents script kiddies
 # to use a remote server somehow.
 maparo --remote <ip:port> --remote-secret <secret> mod-udp-rtt --mode server --port 8888
+
+
+
 
 
 # Campaing Config
@@ -132,3 +141,90 @@ maparo --remote <ip:port> --remote-secret <secret> mod-udp-rtt --mode server --p
 	]
 }
 ```
+
+
+# Command Line Interface Equivalent to iperf, netperf, ...
+
+## Iperf
+
+### One way TCP, maximum throughput
+
+Iperf:
+
+```
+# client
+iperf -c <address>
+# server
+iperf -s -D
+```
+
+Maparo
+
+```
+# client
+# server
+maparo daemon
+```
+
+
+### TCP from Server to Client (reverse), maximum throughput
+
+Iperf:
+
+```
+# client
+iperf -d -c <address>
+# server
+iperf -s -D
+```
+
+Maparo
+
+```
+# client
+maparo mod-tcp-goodput-reverse config.addr=<address>
+# server
+maparo daemon
+```
+
+
+### Parallel Bidirectional TCP, maximum throughput
+
+Iperf:
+
+```
+# client
+iperf -d -c <address>
+# server
+iperf -s -D
+```
+
+Maparo
+
+```
+# client
+maparo campaign-tcp-bidirectinal config.addr=<address>
+# server
+maparo daemon
+```
+
+### Parallel Bidirectional TCP, maximum throughput, sequential
+
+Iperf:
+
+```
+# client
+iperf -d -c <address>
+# server
+iperf -s -D
+```
+
+Maparo
+
+```
+# client
+maparo campaign-tcp-bidirectinal-sequential config.addr=<address>
+# server
+maparo daemon
+```
+
