@@ -22,6 +22,25 @@ simple data exchange it has some novel features.
 - IPv6 flowlabel support
 - Selectable congestion control algorithm
 
+
+## Configuration
+
+```
+{
+  # per default one TCP transmitter is started, to spawn exactly
+	# to much threads are cores are available use "cores".
+	# Use "threads" if you want to fully utilize all virtual cores,
+	# including hyperthreads.
+	# If the system has several sockets, all sockets are utilized for
+	# "cores" and "threads".
+	"worker" : "1"
+
+	# payload pattern. Default is zeroized because we want to fullfill
+	# the pipe and offload as much as possible. 
+	"payload-pattern" : "zeroized"
+}
+```
+
 ## Not Supported
 
-- Ingnore <n> seconds from start of measuremtn. This must be done by analysis tooling
+- Ignore <n> seconds from start of measuremtn. This must be done by analysis tooling
