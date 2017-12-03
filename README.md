@@ -75,6 +75,31 @@ sudo apt-get install golang-go
 
 ## Plotting Ideas
 
+If the JSON output includes information what module/campaign
+was called and all information is available (i.e. remote call,
+client and server json in one json structure it is possible to
+pipe the data to a python3 script. The Python3 script will
+visualize and output the information.
+
+```
+# server
+maparo daemon
+
+# client
+mapago module tcp-througput format=json conf.dst=::1 | mapago-chart --output-dir tcp-througput
+
+$ ls tcp-througput
+tcp-througput-over-time.data
+tcp-througput-over-time.py
+tcp-througput-over-time.png
+
+tcp-througput-info.data
+tcp-througput-info.py
+tcp-througput-info.png
+
+[...]
+```
+
 - http://blog.enthought.com/general/visualizing-uncertainty/
 - https://plot.ly/python/box-plots/
 - http://jonchar.net/notebooks/matplotlib-styling/
