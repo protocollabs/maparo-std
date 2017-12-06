@@ -21,6 +21,7 @@ simple data exchange it has some novel features.
   other configuration options
 - IPv6 flowlabel support
 - Selectable congestion control algorithm
+- Parallel Workers (thread support)
 
 
 ## Configuration
