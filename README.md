@@ -33,7 +33,7 @@ maparo <args> | python3 graph-script.py -o output.png
 ## Parsing Format
 
 *Maparo* will print out the results and the input parameters as well as other
-gathered system parameters:
+gathered system parameters if JSON is the output format:
 
 ```
 {

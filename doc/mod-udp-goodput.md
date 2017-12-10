@@ -68,6 +68,11 @@ All UDP features of nuttcp should be supported, e.g.: `nuttcp -l8972 -T30 -u
   # Can be human or json
 	"output-format" : "human"
 
+  # ordinary write systemcall is used for transfer data. This has no zero copy
+	# optimization but it is safe on all operating systems.
+	# "mmap-sendfile" and friends can later added.
+	"tx-method" : "write"
+
 }
 ```
 
@@ -151,9 +156,6 @@ to the client. At the end the identical information must be available.
 
 
 
-
-
-
 # Output Format
 
 Based on the previous data (result data) the human and json data is generated.
@@ -178,3 +180,15 @@ for all compatible implementations.
 }
 
 ```
+
+# Internal and Implementation Specifics
+
+# Memory Mapping
+
+To reduce overhead the pages are pre-allocated and pre-filled with data.
+Sendfile is used to send the data to the socket to reduce copy overhead.  This
+zerocopy mechanism must is disabled by default to gain a broad operating system
+support.
+
+Probably a `sendfile`, `mmap`, `write` **method** flag can be used. write as the
+default value.
