@@ -24,6 +24,15 @@ modules are supported by a peer/server.
 	to exchange the measurement data back to the client. The client is free
 	to print status information if the cpu load is not noticable affected.
 
+### Exchanged Time Format
+
+If time is exchanged via JSON the format must be UTC and with a resulution
+of nanosecond:
+
+```
+2017-05-14T23:55:00.123456789Z
+```
+
 # Cross Platform Functionality
 
 Not all features are supported at every platform. These features
