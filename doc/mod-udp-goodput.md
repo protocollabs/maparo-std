@@ -76,7 +76,87 @@ All UDP features of nuttcp should be supported, e.g.: `nuttcp -l8972 -T30 -u
 - Packet loss and reordering detection
 - Read payload from STDIN or from file
 
-## Output Format
+# Result Data
+
+The data set which is generated locally (client) and foreign (server) generated
+data sets.
+
+## Client
+
+The client is the sending host
+
+`result-client.json`
+
+## Server
+
+The server is the receiving host
+
+`result-server.json` is created at the server side and transfered to the client by
+
+- using USB stick and copy the JSON file to the client
+- or (more easy) by using the remote option and transfer the data automatically
+	to the client
+
+```
+{
+  "measurement" : [
+		{
+			"first-packet-timestamp" : "2017-05-14T23:55:00.123456789Z",
+			"last-packet-timestamp" : "2017-05-14T23:55:10.123456789Z",
+			"bytes-received: "23923932",
+			"packets-received: "1922",
+		}
+	]
+}
+```
+
+For continious mode the returned data is accumulated:
+
+```
+{
+  "measurement" :
+	[
+		{
+			"first-packet-timestamp" : "2017-05-14T23:55:00.123456789Z",
+			"last-packet-timestamp" : "2017-05-14T23:55:01.123456789Z",
+			"bytes-received: "32",
+			"packets-received: "22",
+		}
+	],
+	[
+		{
+			"first-packet-timestamp" : "2017-05-14T23:55:00.123456789Z",
+			"last-packet-timestamp" : "2017-05-14T23:55:05.123456789Z",
+			"bytes-received: "23932",
+			"packets-received: "922",
+		}
+	],
+	[
+		{
+			"first-packet-timestamp" : "2017-05-14T23:55:00.123456789Z",
+			"last-packet-timestamp" : "2017-05-14T23:55:10.123456789Z",
+			"bytes-received: "23923932",
+			"packets-received: "1922",
+		}
+	],
+}
+```
+
+The last data entries are added. The analyser is able to draw charts or do
+other analysis based on the history of the data. There is no partial message
+format. The idea is that the format is unique for remote and manual
+mode: remote where the JSON is synched back to the client every n seconds
+and the manual mode where the whole data set is later copied manually
+to the client. At the end the identical information must be available.
+
+
+
+
+
+
+# Output Format
+
+Based on the previous data (result data) the human and json data is generated.
 
 ### Human
 
