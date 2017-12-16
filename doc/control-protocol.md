@@ -62,8 +62,10 @@ The reply host MUST transfer the data back to the sender as fast as possible.
 
 The server is free to ignore payloads larger as 512 bytes.
 
+### Info Message
 
-### Info Request
+
+#### Info Request
 
 | Field Name  | Required |
 | ----------- | -------- |
@@ -96,18 +98,37 @@ address if it is a multicast module or unicast if UDP unicast analysis.
   "seq" : <uint64_t>
 
   # The timestamp is replied untouched by the server. The timestamp can
-	# be used by the client to calculate the round trip time.
+  # be used by the client to calculate the round trip time.
   # The timestamp in maparo format with nanoseconds, optional
   # In UTC
   # format example: 2017-05-14T23:55:00.123456789Z
   "ts" : "<TS>"
+
+  # Valid values:
+	# - amd64
+  # - 386
+	# - arm
+	# - arm64
+	# - ppc64le
+	# - s390x
+	# - unknown
+  "arch" : <ARCH>
+
+  # valid values:
+  # - linux
+  # - windows
+	# - freebsd
+	# - osx
+  # - android
+	# - ios
+	# - unknown
+  "os" : <OS>
 }
 ```
 
 
-###
 
-### Info Reply
+#### Info Reply
 
 | Field Name  | Required |
 | ----------- | -------- |
@@ -115,6 +136,11 @@ address if it is a multicast module or unicast if UDP unicast analysis.
 
 Generated from server, sent to TCP unicast address or UDP unicast
 address. The address is the sender ip address.
+
+Info messages should be replied as fast a possible. This is required to calculate
+a clean round trip time. The info client SHOULD calculate as much as possible values
+before the reception of info-request messages. I.e. the id can be calculated at
+program start for example.
 
 ```
 {
@@ -124,7 +150,6 @@ address. The address is the sender ip address.
 
   # the RePlied sequence number from the sender
   "seq-rp" : <uint64_t>
-
 
   # the RePlied sequence number from the sender - if available. If not
   # nothing MUST be replied.
@@ -138,6 +163,12 @@ address. The address is the sender ip address.
   # The first check if the replied timestamp is between the client info-request
   # sending timestamp and the client info-reply receive timestamp.
   "ts" : "<TS>"
+
+  # see info-request for valid list
+  "arch" : <ARCH>
+
+  # see info-request for valid list
+  "os" : <OS>
 }
 ```
 
