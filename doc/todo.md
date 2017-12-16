@@ -91,9 +91,11 @@ There are more use cases where a control channel is
 possible as without. Exceptions are multicast modules.
 
 
-
+```
 maparo remote --key secret
+```
 
+```
 # remote means that the other peer must operate in
 # strict remote mode. E.g. the operation mode is
 # dictated from the client. A remote process one client
@@ -105,6 +107,7 @@ maparo remote --key secret
 # it is used as the encryption and prevents script kiddies
 # to use a remote server somehow.
 maparo --remote <ip:port> --remote-secret <secret> mod-udp-rtt --mode server --port 8888
+```
 
 
 
