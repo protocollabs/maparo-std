@@ -103,26 +103,6 @@ address if it is a multicast module or unicast if UDP unicast analysis.
   # In UTC
   # format example: 2017-05-14T23:55:00.123456789Z
   "ts" : "<TS>"
-
-  # Valid values:
-	# - amd64
-  # - 386
-	# - arm
-	# - arm64
-	# - ppc64le
-	# - s390x
-	# - unknown
-  "arch" : <ARCH>
-
-  # valid values:
-  # - linux
-  # - windows
-	# - freebsd
-	# - osx
-  # - android
-	# - ios
-	# - unknown
-  "os" : <OS>
 }
 ```
 
@@ -164,13 +144,30 @@ program start for example.
   # sending timestamp and the client info-reply receive timestamp.
   "ts" : "<TS>"
 
-  # see info-request for valid list
+  # Valid values:
+	# - amd64
+  # - 386
+	# - arm
+	# - arm64
+	# - ppc64le
+	# - s390x
+	# - unknown
   "arch" : <ARCH>
 
-  # see info-request for valid list
+  # valid values:
+  # - linux
+  # - windows
+	# - freebsd
+	# - osx
+  # - android
+	# - ios
+	# - unknown
   "os" : <OS>
 }
 ```
+
+
+![image](https://github.com/protocollabs/maparoraw/master/docs/images/control-time-measurement.svg)
 
 
 ### 
