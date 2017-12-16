@@ -145,29 +145,29 @@ program start for example.
   "ts" : "<TS>"
 
   # Valid values:
-	# - amd64
+  # - amd64
   # - 386
-	# - arm
-	# - arm64
-	# - ppc64le
-	# - s390x
-	# - unknown
+  # - arm
+  # - arm64
+  # - ppc64le
+  # - s390x
+  # - unknown
   "arch" : <ARCH>
 
   # valid values:
   # - linux
   # - windows
-	# - freebsd
-	# - osx
+  # - freebsd
+  # - osx
   # - android
-	# - ios
-	# - unknown
+  # - ios
+  # - unknown
   "os" : <OS>
 }
 ```
 
 
-![image](https://github.com/protocollabs/maparo/raw/master/docs/images/control-time-measurement.svg)
+![image](images/control-time-measurement.svg)
 
 
 ### 

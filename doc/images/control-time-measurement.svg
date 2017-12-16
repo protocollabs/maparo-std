@@ -9,9 +9,9 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="297mm"
-   height="210mm"
-   viewBox="0 0 297 210"
+   width="401.70624mm"
+   height="135.3718mm"
+   viewBox="0 0 401.70624 135.3718"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
@@ -26,8 +26,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
-     inkscape:cx="1077.347"
-     inkscape:cy="530.5839"
+     inkscape:cx="1079.2368"
+     inkscape:cy="238.90226"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -35,10 +35,16 @@
      inkscape:window-height="1013"
      inkscape:window-x="0"
      inkscape:window-y="33"
-     inkscape:window-maximized="1">
+     inkscape:window-maximized="1"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0">
     <inkscape:grid
        type="xygrid"
-       id="grid834" />
+       id="grid834"
+       originx="0.50000001"
+       originy="-73.583331" />
   </sodipodi:namedview>
   <metadata
      id="metadata5">
@@ -56,7 +62,7 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(0,-87)">
+     transform="translate(0.5,-88.044882)">
     <rect
        style="opacity:1;fill:#ecf0f1;fill-opacity:1;stroke:#ecf0f1;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.35643568"
        id="rect932"
@@ -68,7 +74,7 @@
        ry="2" />
     <path
        style="opacity:1;vector-effect:none;fill:#2c3e50;fill-opacity:1;fill-rule:evenodd;stroke:#2c3e50;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 52.916667,95.916671 0,100.541669"
+       d="M 52.916667,95.916671 V 196.45834"
        id="path836"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cc" />
