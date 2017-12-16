@@ -167,7 +167,7 @@ program start for example.
 ```
 
 
-![image](https://github.com/protocollabs/maparoraw/master/docs/images/control-time-measurement.svg)
+![image](https://github.com/protocollabs/maparo/raw/master/docs/images/control-time-measurement.svg)
 
 
 ### 
