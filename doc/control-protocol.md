@@ -8,6 +8,10 @@ operation must be possible without a control protocol, though the program
 arguments must be set manually and the result set must be merged manually by
 using USB stick or some other transfer method.
 
+The default control port is 64321
+
+
+
 ## Unicast
 
 ## Multicast
@@ -26,10 +30,12 @@ different.
 
 In `uint32_t`, network byte order:
 
-- `0`: null message request
-- `1`: null message reply
+- `0`: null request
+- `1`: null reply
 - `2`: info request
 - `3`: info reply
+- `4`: module start request
+- `5`: module start reply
 
 
 ## Messages
@@ -47,6 +53,9 @@ The purpose of NULL messages is to warm up the pipe.
 Subsequent messages (e.g. info-request) SHOULD be transmitted if the sending
 and receive phase is finished. Only after the null-reply is received the
 complete chain is processed (warmed).
+
+The first 4 bytes of the payload contains a network byte order encoded length of
+the payload len, not including this "header".
 
 The null message data do not matter. The sender is free to send binary or ascii
 data. The reply is never touched, modified or checked in any way.
@@ -88,6 +97,12 @@ address if it is a multicast module or unicast if UDP unicast analysis.
   # The id is stable for process lifetime. It is ok when the uuid is 
   # re-generated at program start
   "id" : "hostname=uuid",
+
+  # session: a rand value to distinct the particular measurement.
+	# this is required if a host operates several measurement in
+	# parallel. The server will likely block a new session if a old
+	# if currently active.
+  "session" : <uint64_t rand>
 
   # a sender may send several request in a row. To address the right one
   # the reply host will refelct the sequence number.
@@ -139,6 +154,9 @@ program start for example.
   # the RePlied sequence number from the sender
   "seq-rp" : <uint64_t>
 
+  # the RePlied session from the sender
+  "session-rp" : <uint64_t>
+
   # the RePlied sequence number from the sender - if available. If not
   # nothing MUST be replied.
   "ts-rp" : "<TS>"
@@ -187,4 +205,56 @@ program start for example.
 ![image](images/control-time-measurement.svg)
 
 
-### 
+### Module Start
+
+Used to start module on server
+
+#### Medule Start Request
+```
+{
+  # The Id identify the reply node uniquely. The id is generated in indentical
+  # way as the info-request id.
+  "id" : "hostname=uuid",
+
+  # session: a rand value to distinct the particular measurement.
+	# this is required if a host operates several measurement in
+	# parallel. The server will likely block a new session if a old
+	# if currently active.
+  "session" : <uint64_t rand>
+
+  # a sequence to identify the answer. For UDP within a high loss environment
+	# the client may send several requests. The server SHOULD never reply twice
+	# or even more.
+	# The 
+  "seq" : <uint64_t>
+
+  # to implement a trivial access mechanism a secret can be given.
+  # if the server do not accept the string the request is dropped
+  # and a warning should be printed at server side that the secret
+  # do not match the expections.
+  # If the server has no configured secret but the client sent a
+  # secret, then the server SHOULD accept the request.
+  "secret" : <string>
+}
+```
+
+#### Module Start Reply
+
+```
+{
+  # The Id identify the reply node uniquely. The id is generated in indentical
+  # way as the info-request id.
+  "id" : "hostname=uuid",
+
+  # the status of the previous request, can be
+  # - "ok"
+  # - "failed"
+  "status" : <status>
+
+	# a human readable error message WHY it failed
+	"message"
+
+  "seq-rp" : <uint64_t>
+  "session-rp" : <uint64_t>
+}
+```
