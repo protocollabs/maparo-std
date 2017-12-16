@@ -40,6 +40,39 @@ address if it is a multicast module or unicast if UDP unicast analysis.
   # The id is stable for process lifetime. It is ok when the uuid is 
   # re-generated at program start
   "id" : "hostname=uuid",
+
+  # a sender may send several request in a row. To address the right one
+  # the reply host will refelct the sequence number.
+	# The sequence number should start with 0 for the first generated packet
+	# but can start randomly too. The sequence number MUST be incremented at
+	# at each transmission. In the case of an overflow the next sequence numner
+	# MUST be 0. Strict unsigned integer arithmetic
+	"seq" : <uint64_t>
+
+	"
+}
+```
+
+
+###
+
+### Info Reply
+
+| Field Name  | Required |
+| ----------- | -------- |
+| `id` | yes |
+
+Generated from server, sent to TCP unicast address or UDP unicast
+address. The address is the sender ip address.
+
+```
+{
+  # The Id identify the reply node uniquely. The id is generated in indentical
+	# way as the info-request id.
+  "id" : "hostname=uuid",
+
+  # the reflected sequence number from the sender
+	"seq-sender" : <uint64_t>
 }
 ```
 
