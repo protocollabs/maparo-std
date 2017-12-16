@@ -31,14 +31,14 @@ address if it is a multicast module or unicast if UDP unicast analysis.
 ```
 {
   # to identify the sender uniquely a identifier must be transmited.
-	# The id consits of two parts:
-	# - a human usabkle part, like hostname or ip address if no hostname
-	#   is available.
-	# - a uuid to guarantee a unique name
-	# Both parts are divided by "=", if the character "=" is in the human
-	# part it must be replaced by something else.
-	# The id is stable for process lifetime. It is ok when the uuid is 
-	# re-generated at program start
+  # The id consits of two parts:
+  # - a human usabkle part, like hostname or ip address if no hostname
+  #   is available.
+  # - a uuid to guarantee a unique name
+  # Both parts are divided by "=", if the character "=" is in the human
+  # part it must be replaced by something else.
+  # The id is stable for process lifetime. It is ok when the uuid is 
+  # re-generated at program start
   "id" : "hostname=uuid",
 }
 ```
