@@ -95,7 +95,9 @@ address if it is a multicast module or unicast if UDP unicast analysis.
   # MUST be 0. Strict unsigned integer arithmetic
   "seq" : <uint64_t>
 
-  # the timestamp in maparo format with nanoseconds, optional
+  # The timestamp is replied untouched by the server. The timestamp can
+	# be used by the client to calculate the round trip time.
+  # The timestamp in maparo format with nanoseconds, optional
   # In UTC
   # format example: 2017-05-14T23:55:00.123456789Z
   "ts" : "<TS>"
@@ -127,6 +129,15 @@ address. The address is the sender ip address.
   # the RePlied sequence number from the sender - if available. If not
   # nothing MUST be replied.
   "ts-rp" : "<TS>"
+
+  # the timestamp in standard maparo format (also UTC). The
+  # timestamp can be used to check (simplified) the time delta between
+  # client and server. The client can warn the user if the times are not
+  # synchronized or use the method to synchronize the time with the client
+  # e.g. saving the calculated offset (neglect rtt and processing delays).
+  # The first check if the replied timestamp is between the client info-request
+  # sending timestamp and the client info-reply receive timestamp.
+  "ts" : "<TS>"
 }
 ```
 
