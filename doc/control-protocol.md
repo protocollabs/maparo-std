@@ -8,6 +8,20 @@ operation must be possible without a control protocol, though the program
 arguments must be set manually and the result set must be merged manually by
 using USB stick or some other transfer method.
 
+### Protocol Requirements
+
+The very first four bytes of a packet must encode the control protocol type.
+The type has an associated encoding format (i.e. JSON). But this can be
+different.
+
+### Protocol Types
+
+In `uint32_t`, network byte order:
+
+- `0`: null message request
+- `1`: null message reply
+- `2`: info request
+- `3`: info reply
 
 ## Unicast
 
@@ -19,11 +33,38 @@ unicast.  The unicast reply must address the sending IPv{4,6} address.
 
 ## Message Sequences
 
+### Null Messages
+
+Null Messages are noop messages with no direct usage beside "warming the
+cache". Why info-request, info-reply messages measure the round trip times.
+To be accurate the cell phone should not be in deep idle mode, systemd should
+have started the daemon, the routing cache should be filed, IPv4 APR and IPv6
+neighbor discovery mechanisms should be warmed. etc.
+
+The purpose of NULL messages is to warm up the pipe.
+
+The null message data do not matter. The sender is free to send binary or ascii
+data. The reply is never touched, modified or checked in any way.
+
+#### Null Request
+
+The message size MUST NOT be larger as 512 bytes
+
+#### Null Reply
+
+The reply host SHOULD implement a ratelimiting component.
+The reply host MUST transfer the data back to the sender as fast as possible.
+
+The server is free to ignore payloads larger as 512 bytes.
+
+
 ### Info Request
 
 | Field Name  | Required |
 | ----------- | -------- |
 | `id` | yes |
+| `seq` | yes |
+| `ts` | no (optional) |
 
 Generated from client, sent to TCP unicast address or UDP multicast
 address if it is a multicast module or unicast if UDP unicast analysis.
@@ -49,7 +90,10 @@ address if it is a multicast module or unicast if UDP unicast analysis.
 	# MUST be 0. Strict unsigned integer arithmetic
 	"seq" : <uint64_t>
 
-	"
+  # the timestamp in maparo format with nanoseconds, optional
+	# In UTC
+	# format example: 2017-05-14T23:55:00.123456789Z
+	"ts" : "<TS>"
 }
 ```
 
@@ -71,8 +115,13 @@ address. The address is the sender ip address.
 	# way as the info-request id.
   "id" : "hostname=uuid",
 
-  # the reflected sequence number from the sender
-	"seq-sender" : <uint64_t>
+  # the RePlied sequence number from the sender
+	"seq-rp" : <uint64_t>
+
+
+  # the RePlied sequence number from the sender - if available. If not
+	# nothing MUST be replied.
+	"ts-rp" : "<TS>"
 }
 ```
 
