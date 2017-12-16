@@ -40,14 +40,26 @@ adjustments.
 `CLOCK_MONOTONIC_RAW` would be fine if we can build upon maparo internal time
 synchronization mechanisms - but we can't.
 
+Use: `
+
 ### Exchanged Time Format
 
 If time is exchanged via JSON the format must be UTC and with a resulution
-of nanosecond:
+of microseconds:
 
 ```
-2017-05-14T23:55:00.123456789Z
+2017-12-16T12:32:42.763987
 ```
+
+With Python3:
+
+```python
+import datetime
+dt = datetime.datetime.utcnow()
+print(dt.strftime('%Y-%m-%dT%H:%M:%S.%f'))
+```
+
+The 
 
 # Cross Platform Functionality
 
