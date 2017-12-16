@@ -8,6 +8,14 @@ operation must be possible without a control protocol, though the program
 arguments must be set manually and the result set must be merged manually by
 using USB stick or some other transfer method.
 
+## Unicast
+
+## Multicast
+
+If a remote server receives a UDP multicast request, the reply must be a UDP
+unicast.  The unicast reply must address the sending IPv{4,6} address.
+
+
 ### Protocol Requirements
 
 The very first four bytes of a packet must encode the control protocol type.
@@ -23,15 +31,8 @@ In `uint32_t`, network byte order:
 - `2`: info request
 - `3`: info reply
 
-## Unicast
 
-## Multicast
-
-If a remote server receives a UDP multicast request, the reply must be a UDP
-unicast.  The unicast reply must address the sending IPv{4,6} address.
-
-
-## Message Sequences
+## Messages
 
 ### Null Messages
 
@@ -42,6 +43,10 @@ have started the daemon, the routing cache should be filed, IPv4 APR and IPv6
 neighbor discovery mechanisms should be warmed. etc.
 
 The purpose of NULL messages is to warm up the pipe.
+
+Subsequent messages (e.g. info-request) SHOULD be transmitted if the sending
+and receive phase is finished. Only after the null-reply is received the
+complete chain is processed (warmed).
 
 The null message data do not matter. The sender is free to send binary or ascii
 data. The reply is never touched, modified or checked in any way.
@@ -84,16 +89,16 @@ address if it is a multicast module or unicast if UDP unicast analysis.
 
   # a sender may send several request in a row. To address the right one
   # the reply host will refelct the sequence number.
-	# The sequence number should start with 0 for the first generated packet
-	# but can start randomly too. The sequence number MUST be incremented at
-	# at each transmission. In the case of an overflow the next sequence numner
-	# MUST be 0. Strict unsigned integer arithmetic
-	"seq" : <uint64_t>
+  # The sequence number should start with 0 for the first generated packet
+  # but can start randomly too. The sequence number MUST be incremented at
+  # at each transmission. In the case of an overflow the next sequence numner
+  # MUST be 0. Strict unsigned integer arithmetic
+  "seq" : <uint64_t>
 
   # the timestamp in maparo format with nanoseconds, optional
-	# In UTC
-	# format example: 2017-05-14T23:55:00.123456789Z
-	"ts" : "<TS>"
+  # In UTC
+  # format example: 2017-05-14T23:55:00.123456789Z
+  "ts" : "<TS>"
 }
 ```
 
@@ -112,16 +117,16 @@ address. The address is the sender ip address.
 ```
 {
   # The Id identify the reply node uniquely. The id is generated in indentical
-	# way as the info-request id.
+  # way as the info-request id.
   "id" : "hostname=uuid",
 
   # the RePlied sequence number from the sender
-	"seq-rp" : <uint64_t>
+  "seq-rp" : <uint64_t>
 
 
   # the RePlied sequence number from the sender - if available. If not
-	# nothing MUST be replied.
-	"ts-rp" : "<TS>"
+  # nothing MUST be replied.
+  "ts-rp" : "<TS>"
 }
 ```
 
