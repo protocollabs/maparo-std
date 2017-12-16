@@ -48,8 +48,11 @@ If time is exchanged via JSON the format must be UTC and with a resulution
 of microseconds:
 
 ```
-2017-12-16T12:32:42.763987
+2017-12-16T12:32:42.763987000
 ```
+
+Implementations SHOULD check the number of digits of the fractions. If the number
+is six then microseconds is used. If 9 digits it should be interpreted as nanoseconds.
 
 With Python3:
 
