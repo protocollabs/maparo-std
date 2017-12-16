@@ -103,6 +103,14 @@ address if it is a multicast module or unicast if UDP unicast analysis.
   # In UTC
   # format example: 2017-05-14T23:55:00.123456789Z
   "ts" : "<TS>"
+
+  # to implement a trivial access mechanism a secret can be given.
+  # if the server do not accept the string the request is dropped
+  # and a warning should be printed at server side that the secret
+  # do not match the expections.
+  # If the server has no configured secret but the client sent a
+  # secret, then the server SHOULD accept the request.
+  "secret" : <string>
 }
 ```
 
@@ -144,6 +152,14 @@ program start for example.
   # sending timestamp and the client info-reply receive timestamp.
   "ts" : "<TS>"
 
+  # list of supported modules, the entries must point to empty dictionaries
+  # for now. Later the empty dictionaries can be filled if additional
+  # information is required.
+  "modules" : {
+     "udp-goodput" : { },
+     "tcp-goodput" : { },
+  }
+
   # Valid values:
   # - amd64
   # - 386
@@ -166,6 +182,7 @@ program start for example.
 }
 ```
 
+##### Time Offset Calculation and Visualization
 
 ![image](images/control-time-measurement.svg)
 
