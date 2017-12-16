@@ -1,5 +1,11 @@
 # Maparo
 
+- [command-line-interface.md](command-line-interface.md)
+
+## Control Protocol
+
+- [control-protocol.md](control-protocol.md)
+
 ## Modules
 
 - [TCP Goodput (tcp-goodput)](mod-tcp-goodput.md)
