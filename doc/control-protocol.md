@@ -10,9 +10,10 @@ using USB stick or some other transfer method.
 
 The default control port is 64321
 
-
-
 ## Unicast
+
+For Unicast measurments the control protocol SHOULD use TCP - even if the
+measurement protocol is UDP.
 
 ## Multicast
 
@@ -98,14 +99,15 @@ address if it is a multicast module or unicast if UDP unicast analysis.
   # re-generated at program start
   "id" : "hostname=uuid",
 
-  # session: a rand value to distinct the particular measurement.
-	# this is required if a host operates several measurement in
-	# parallel. The server will likely block a new session if a old
-	# if currently active.
-  "session" : <uint64_t rand>
-
   # a sender may send several request in a row. To address the right one
-  # the reply host will refelct the sequence number.
+  # the reply host will send back the sequence number.
+  #
+  # A receiver MUST answer to one equest exactly once.
+  #
+  # Sequence numbers are message specific. For example: info request message
+  # numbers start with 0, later module-start-request first packet also has
+  # sequence number 0.
+  #
   # The sequence number should start with 0 for the first generated packet
   # but can start randomly too. The sequence number MUST be incremented at
   # at each transmission. In the case of an overflow the next sequence numner
@@ -153,9 +155,6 @@ program start for example.
 
   # the RePlied sequence number from the sender
   "seq-rp" : <uint64_t>
-
-  # the RePlied session from the sender
-  "session-rp" : <uint64_t>
 
   # the RePlied sequence number from the sender - if available. If not
   # nothing MUST be replied.
@@ -216,16 +215,9 @@ Used to start module on server
   # way as the info-request id.
   "id" : "hostname=uuid",
 
-  # session: a rand value to distinct the particular measurement.
-	# this is required if a host operates several measurement in
-	# parallel. The server will likely block a new session if a old
-	# if currently active.
-  "session" : <uint64_t rand>
-
   # a sequence to identify the answer. For UDP within a high loss environment
-	# the client may send several requests. The server SHOULD never reply twice
-	# or even more.
-	# The 
+  # the client may send several requests. The server SHOULD never reply twice
+  # or even more.
   "seq" : <uint64_t>
 
   # to implement a trivial access mechanism a secret can be given.
@@ -235,6 +227,15 @@ Used to start module on server
   # If the server has no configured secret but the client sent a
   # secret, then the server SHOULD accept the request.
   "secret" : <string>
+
+  #
+  module = {
+    "name" : <module-name>
+    "mode" : <"client" | "server">
+    # the config for the module
+		"config" : {
+    }
+  }
 }
 ```
 
@@ -255,6 +256,5 @@ Used to start module on server
 	"message"
 
   "seq-rp" : <uint64_t>
-  "session-rp" : <uint64_t>
 }
 ```
