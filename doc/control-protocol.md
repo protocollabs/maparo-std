@@ -29,14 +29,17 @@ different.
 
 ### Protocol Types
 
-In `uint32_t`, network byte order:
+In `uint32_t`, network byte order, starting with 1, 0 is intentionally left
+blank:
 
-- `0`: null request
-- `1`: null reply
-- `2`: info request
-- `3`: info reply
-- `4`: module start request
-- `5`: module start reply
+- `1`: null request
+- `2`: null reply
+- `3`: info request
+- `4`: info reply
+- `5`: module start request
+- `6`: module start reply
+- `7`: module stop request
+- `8`: module stop reply
 
 
 ## Messages
@@ -111,7 +114,9 @@ address if it is a multicast module or unicast if UDP unicast analysis.
   # The sequence number should start with 0 for the first generated packet
   # but can start randomly too. The sequence number MUST be incremented at
   # at each transmission. In the case of an overflow the next sequence numner
-  # MUST be 0. Strict unsigned integer arithmetic
+  # MUST be 0. Strict unsigned integer arithmetic.
+  # The value must be converted to string, this is required to align all
+  # json encoding to string values everywhere. "seq" : "1" not "seq" : 1
   "seq" : <uint64_t>
 
   # The timestamp is replied untouched by the server. The timestamp can
@@ -208,7 +213,7 @@ program start for example.
 
 Used to start module on server
 
-#### Medule Start Request
+#### Module Start Request
 ```
 {
   # The Id identify the reply node uniquely. The id is generated in indentical
@@ -249,12 +254,31 @@ Used to start module on server
 
   # the status of the previous request, can be
   # - "ok"
+  # - "warn" if start was sucessfull BUT there not all parameter can be fullfilled
+  #          then warn can be used to signal such a condition
   # - "failed"
   "status" : <status>
 
-	# a human readable error message WHY it failed
-	"message"
+  # a human readable error message WHY it failed. Can be
+	# missing. If status is != ok the message SHOULD be set.
+  "message" : <string>
 
   "seq-rp" : <uint64_t>
+}
+```
+
+### Module Stop
+
+#### Module Stop Request
+
+```
+{
+}
+```
+
+#### Module Stop Reply
+
+```
+{
 }
 ```
