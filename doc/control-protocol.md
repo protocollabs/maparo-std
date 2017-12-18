@@ -23,6 +23,17 @@ must be handled by the control plane.
 If a remote server receives a UDP multicast request, the reply must be a UDP
 unicast.  The unicast reply must address the sending IPv{4,6} address.
 
+## Binary Encoded Header
+
+The standard control protocol header is componsed of the following elements
+for **all** protocol headers:
+
+- 4 byte, network byte order encoded type
+- 4 byte, network byte order encoded packet length
+- 2 byte, flags
+  - if message is lzma compressed: first bit 1, otherwise 0
+	- other bits must be 0
+
 
 ### Protocol Requirements
 
@@ -214,7 +225,12 @@ program start for example.
 
 ### Module Start
 
-Used to start module on server
+Used to start module on server.
+
+The module-start message is self-contained. All server actions depends on this
+message and are stateless. There is no need for the server to store information
+from previous null-request, info-request or any other messages. This behavior
+is intended.
 
 #### Module Start Request
 ```
@@ -239,15 +255,37 @@ Used to start module on server
   #
   module = {
     "name" : <module-name>
+    # the requested mode on server side, usually "server"
     "mode" : <"client" | "server">
     # the config for the module
-		"config" : {
+		"configuration" : {
     }
   }
 }
 ```
 
 #### Module Start Reply
+
+A server MUST answer to a start-request with a start-reply *after* all systems
+are started and ready to serve the client. A server MUST NOT start the subsystems
+afterwards.
+
+Background:
+
+- if the server proactively answers with a reply and the ports are not started and
+  the client send immediately a message the message will be lost. So everything
+  must be setup before the reply message is transmitted to the client
+- if at server side something fail, the server can send the error back to the
+  client and inform the client. This is not possible if the answer is send
+  immediately.
+
+If the server do not receive any packets within a predefined duration the server
+SHOULD assume that the client crashes and SHOULD restart to a sane state so that
+other clients are able to connect and use the service.
+
+> This can be implemented by spanning a timer and if within n minutes no packages
+> arrived the server should cancel the state and switch to the initial state.
+
 
 ```
 {
@@ -273,6 +311,15 @@ Used to start module on server
 ### Module Stop
 
 #### Module Stop Request
+
+The module stop-request must be from the identical start-request sender. The
+source IP doesn't matter. The id is important. The server MUST ignore packages
+from other hosts sending a stop-request message. The server SHOULD print a warning
+message on the console.
+
+The server SHOULD implement a guard time after which the server should accept a
+new module-start sequence.
+
 
 ```
 {
