@@ -13,7 +13,10 @@ The default control port is 64321
 ## Unicast
 
 For Unicast measurments the control protocol SHOULD use TCP - even if the
-measurement protocol is UDP.
+measurement protocol is UDP. If exact round trip time measurements are required,
+the TCP timeouts has negative impact or if UDP has other advantages compared to
+TCP, UDP can be used as the control protocol. Though, packet loss, reordering
+must be handled by the control plane.
 
 ## Multicast
 
