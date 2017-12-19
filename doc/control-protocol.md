@@ -215,6 +215,12 @@ program start for example.
   # - ios
   # - unknown
   "os" : <OS>
+
+  # The server can reply a string where server specific information
+  # can be held. Like banner information or implementation name.
+  # The client SHOULD print this information to the user.
+  # The info string MUST not larger as 32 bytes
+  "info" : <string>
 }
 ```
 
@@ -255,8 +261,6 @@ is intended.
   #
   module = {
     "name" : <module-name>
-    # the requested mode on server side, usually "server"
-    "mode" : <"client" | "server">
     # the config for the module
 		"configuration" : {
     }
