@@ -10,6 +10,8 @@ using USB stick or some other transfer method.
 
 The default control port is 64321
 
+The *secret* MUST be supported by every message.
+
 ## Unicast
 
 For Unicast measurments the control protocol SHOULD use TCP - even if the
@@ -46,8 +48,8 @@ different.
 In `uint32_t`, network byte order, starting with 1, 0 is intentionally left
 blank:
 
-- `1`: null request
-- `2`: null reply
+- `1`: rtt request
+- `2`: rtt reply
 - `3`: info request
 - `4`: info reply
 - `5`: module start request
@@ -58,36 +60,77 @@ blank:
 
 ## Messages
 
-### Null Messages
-
-Null Messages are noop messages with no direct usage beside "warming the
-cache". Why info-request, info-reply messages measure the round trip times.
-To be accurate the cell phone should not be in deep idle mode, systemd should
-have started the daemon, the routing cache should be filed, IPv4 APR and IPv6
-neighbor discovery mechanisms should be warmed. etc.
-
-The purpose of NULL messages is to warm up the pipe.
-
-Subsequent messages (e.g. info-request) SHOULD be transmitted if the sending
-and receive phase is finished. Only after the null-reply is received the
-complete chain is processed (warmed).
+### RTT Messages
 
 The first 4 bytes of the payload contains a network byte order encoded length of
 the payload len, not including this "header".
 
-The null message data do not matter. The sender is free to send binary or ascii
-data. The reply is never touched, modified or checked in any way.
+The first RTT message CAN be ignored to bypass measurement jitter because of unwarmed
+caches, arp/nd setup, xinitd init sequences and other effects.
 
-#### Null Request
+The client can use RTT message several times to increase the precicion of
+measurements.
 
-The message size MUST NOT be larger as 512 bytes
+#### RTT Request
 
-#### Null Reply
+```
+{
+  # to identify the sender uniquely a identifier must be transmited.
+  # The id consits of two parts:
+  # - a human usabkle part, like hostname or ip address if no hostname
+  #   is available.
+  # - a uuid to guarantee a unique name
+  # Both parts are divided by "=", if the character "=" is in the human
+  # part it must be replaced by something else.
+  # The id is stable for process lifetime. It is ok when the uuid is 
+  # re-generated at program start
+  "id" : "hostname=uuid",
 
-The reply host SHOULD implement a ratelimiting component.
+  # a sender may send several request in a row. To address the right one
+  # the reply host will send back the sequence number.
+  #
+  # A receiver MUST answer to one equest exactly once.
+  #
+  # Sequence numbers are message specific. For example: info request message
+  # numbers start with 0, later module-start-request first packet also has
+  # sequence number 0.
+  #
+  # The sequence number should start with 0 for the first generated packet
+  # but can start randomly too. The sequence number MUST be incremented at
+  # at each transmission. In the case of an overflow the next sequence numner
+  # MUST be 0. Strict unsigned integer arithmetic.
+  # The value must be converted to string, this is required to align all
+  # json encoding to string values everywhere. "seq" : "1" not "seq" : 1
+  "seq" : <uint64_t>
+
+  # The timestamp is replied untouched by the server. The timestamp can
+  # be used by the client to calculate the round trip time.
+  # The timestamp in maparo format with nanoseconds, optional
+  # In UTC
+  # format example: 2017-05-14T23:55:00.123456789Z
+  "ts" : "<TS>"
+
+  # to fill the data packet the client can use the padding field to inject
+  # arbitrary data into the packet.
+  #
+  # The field is optional
+  #
+	# If not otherwise specific the padding data SHOULD be replied
+  "padding" : <string>
+ 
+  # if server requires a string the string is required.
+  "secret" : <string>
+}
+```
+
+
+#### RTT Reply
+
+The reply host CAN implement a ratelimiting component.
+
 The reply host MUST transfer the data back to the sender as fast as possible.
 
-The server is free to ignore payloads larger as 512 bytes.
+The server is free to ignore payloads larger as MTU sized packets bytes.
 
 ### Info Message
 
@@ -235,7 +278,7 @@ Used to start module on server.
 
 The module-start message is self-contained. All server actions depends on this
 message and are stateless. There is no need for the server to store information
-from previous null-request, info-request or any other messages. This behavior
+from previous rtt-request, info-request or any other messages. This behavior
 is intended.
 
 #### Module Start Request
