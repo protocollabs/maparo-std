@@ -25,6 +25,21 @@ must be handled by the control plane.
 If a remote server receives a UDP multicast request, the reply must be a UDP
 unicast.  The unicast reply must address the sending IPv{4,6} address.
 
+## Answering Behavior
+
+A server **MUST** not answer to a client request. The behavior is not standardized
+and open to implementers. Servers can use message type 255 to signal an generic
+error condition.
+
+Several possibilities why a server do now answer:
+
+- do not implement the ctrl protocol itself (remember, ctrl protocol is optional)
+- the server is bussy under a other measurement and has no cpu time left to answer
+  another ctrl request. 
+
+A server **SHOULD** answer with a ctrl message if something is broken or an ongoing
+measurement is active.
+
 ## Binary Encoded Header
 
 The standard control protocol header is componsed of the following elements
@@ -56,6 +71,7 @@ blank:
 - `6`: module start reply
 - `7`: module stop request
 - `8`: module stop reply
+- `255`: warning and error message
 
 
 ## Messages
