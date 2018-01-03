@@ -40,6 +40,11 @@ Several possibilities why a server do now answer:
 A server **SHOULD** answer with a ctrl message if something is broken or an ongoing
 measurement is active.
 
+> There is explicetly no hard requirement that a ongoing measurement blocks other
+> measurement attempts. Implementations are free to implement from allowing parallel measurements
+> to only one measurment with a negative warning/error message signaled back to
+> the requester.
+
 ## Binary Encoded Header
 
 The standard control protocol header is componsed of the following elements
