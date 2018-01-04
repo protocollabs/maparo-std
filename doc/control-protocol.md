@@ -19,6 +19,23 @@ sequence number.
 > To increase robustness for lossy links the client may send several requests
 > with increasing sequence number.
 
+The Control Protocol is optional. All implementations are engaged to implement
+a mechanism on server and client side to use the same functionalty without
+the protcol requirements.
+
+## Golden Rule
+
+The Control Protocol MUST never influence the measurment in any way. For
+example: during a TCP measurment the control protocol must absolutely
+do nothing - no transmission at all. This is especially important if
+test are done in envionments with only several kb bandwidht.
+
+The only exceptions are explizit switches where the user is explicetly
+informed that control traffic is not send over the wire. Use cases where
+permanent protocol exchange is required are progress bars where status
+(transfered bytes) are updated live at client side, without waiting
+until the transmission is ready.
+
 ## Unicast
 
 For Unicast measurments the control protocol SHOULD use TCP - even if the
