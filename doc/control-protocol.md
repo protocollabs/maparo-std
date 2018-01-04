@@ -142,8 +142,11 @@ measurements.
   # sequence number 0.
   #
   # The sequence number should start with 0 for the first generated packet
-  # but can start randomly too. The sequence number MUST be incremented at
-  # at each transmission. In the case of an overflow the next sequence numner
+  # but can start randomly too. The sequence number SHOULD be incremented at
+  # at each transmission. It is possible that the sequence number is not a
+  # sequence, but is MUST guaranteed that a sequence number is not transmitted
+  # twice. The trivial implementation is to transmit ordered.
+  # In the case of an overflow the next sequence numner
   # MUST be 0. Strict unsigned integer arithmetic.
   # The value must be converted to string, this is required to align all
   # json encoding to string values everywhere. "seq" : "1" not "seq" : 1
@@ -161,7 +164,7 @@ measurements.
   #
   # The field is optional
   #
-	# If not otherwise specific the padding data SHOULD be replied
+  # If not otherwise specific the padding data SHOULD be replied
   "padding" : <string>
  
   # if server requires a string the string is required.
@@ -263,19 +266,6 @@ program start for example.
 
   # the RePlied sequence number from the sender
   "seq-rp" : <uint64_t>
-
-  # the RePlied sequence number from the sender - if available. If not
-  # nothing MUST be replied.
-  "ts-rp" : "<TS>"
-
-  # the timestamp in standard maparo format (also UTC). The
-  # timestamp can be used to check (simplified) the time delta between
-  # client and server. The client can warn the user if the times are not
-  # synchronized or use the method to synchronize the time with the client
-  # e.g. saving the calculated offset (neglect rtt and processing delays).
-  # The first check if the replied timestamp is between the client info-request
-  # sending timestamp and the client info-reply receive timestamp.
-  "ts" : "<TS>"
 
   # list of supported modules, the entries must point to empty dictionaries
   # for now. Later the empty dictionaries can be filled if additional
