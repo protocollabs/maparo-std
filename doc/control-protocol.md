@@ -103,6 +103,9 @@ blank:
 
 ## Messages
 
+
+![image](images/control-example.svg)
+
 ### RTT Messages
 
 The first 4 bytes of the payload contains a network byte order encoded length of
