@@ -8,9 +8,16 @@ operation must be possible without a control protocol, though the program
 arguments must be set manually and the result set must be merged manually by
 using USB stick or some other transfer method.
 
-The default control port is 64321
+The default control port is **64321**
 
 The *secret* MUST be supported by every message.
+
+The server MUST response to each message - unique identified by the sequence
+number - exactly once. The server MUST not response multiple times to one
+sequence number.
+
+> To increase robustness for lossy links the client may send several requests
+> with increasing sequence number.
 
 ## Unicast
 
