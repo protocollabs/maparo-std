@@ -70,9 +70,9 @@ for **all** protocol headers:
 
 ![image](images/control-header.svg)
 
-- 2 byte, network byte order encoded **type**
-- 2 byte, network byte oder **reserved**
-- 4 byte, network byte order encoded packet **length**
+- 2 byte, `uint16_t`, unsigned, network byte order encoded **type**
+- 2 byte, n**reserved**
+- 4 byte, `uint32_t`, unsigned, network byte order encoded packet **length**
 
 > The reserved field can be used later to signal LZMA compressed payload
 > or for enrypted control 
