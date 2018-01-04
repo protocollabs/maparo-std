@@ -58,6 +58,11 @@ may not be locked in any way to reduce contention.
 
 Clients should implement a backoff for `module-start` requests to prevent storms.
 
+## Discovery Process and Dual Hosts Handling
+
+
+![image](images/control-mcast-discovery-dual-stack.svg)
+
 ## Binary Encoded Header
 
 The standard control protocol header is componsed of the following elements
