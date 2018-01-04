@@ -45,6 +45,12 @@ measurement is active.
 > to only one measurment with a negative warning/error message signaled back to
 > the requester.
 
+A implementation may lock a measurement between `module-start` and `module-stop`
+sequence. Between these the real measurement take place. Control measurements
+may not be locked in any way to reduce contention.
+
+Clients should implement a backoff for `module-start` requests to prevent storms.
+
 ## Binary Encoded Header
 
 The standard control protocol header is componsed of the following elements
