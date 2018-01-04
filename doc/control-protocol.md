@@ -25,7 +25,7 @@ must be handled by the control plane.
 If a remote server receives a UDP multicast request, the reply must be a UDP
 unicast.  The unicast reply must address the sending IPv{4,6} address.
 
-## Answering Behavior
+## Reply Requirements & Behavior
 
 A server **MUST** not answer to a client request. The behavior is not standardized
 and open to implementers. Servers can use message type 255 to signal an generic
