@@ -32,6 +32,14 @@ must be handled by the control plane.
 If a remote server receives a UDP multicast request, the reply must be a UDP
 unicast.  The unicast reply must address the sending IPv{4,6} address.
 
+It is possible that after a certain discovery phase (most likely INFO-REQUEST,
+INFO-REPLY) and the "most wanted" server is selected the addressing change
+from multicast to unicast adressing.
+
+> There is no need to send RTT request/reply probes to an multicast address
+> and filter the results later if several servers are within the multicast
+> domain.
+
 ## Reply Requirements & Behavior
 
 A server **MUST** not answer to a client request. The behavior is not standardized
