@@ -68,11 +68,15 @@ Clients should implement a backoff for `module-start` requests to prevent storms
 The standard control protocol header is componsed of the following elements
 for **all** protocol headers:
 
-- 4 byte, network byte order encoded type
-- 4 byte, network byte order encoded packet length
-- 2 byte, flags
-  - if message is lzma compressed: first bit 1, otherwise 0
-	- other bits must be 0
+![image](images/control-header.svg)
+
+- 2 byte, network byte order encoded **type**
+- 2 byte, network byte oder **reserved**
+- 4 byte, network byte order encoded packet **length**
+
+> The reserved field can be used later to signal LZMA compressed payload
+> or for enrypted control 
+
 
 
 ### Protocol Requirements
