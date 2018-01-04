@@ -374,15 +374,18 @@ other clients are able to connect and use the service.
   # way as the info-request id.
   "id" : "hostname=uuid",
 
-  # the status of the previous request, can be
+  # the status of the previous request, can be (lowercase)
   # - "ok"
+  # - "busy" if another measurement is ongoing and no capacity is available to
+  #          start a new measurement. The client CAN automatically (backoff) come
+  #          back to request a new module-start measurment.
   # - "warn" if start was sucessfull BUT there not all parameter can be fullfilled
   #          then warn can be used to signal such a condition
   # - "failed"
   "status" : <status>
 
   # a human readable error message WHY it failed. Can be
-	# missing. If status is != ok the message SHOULD be set.
+  # missing. If status is != ok the message SHOULD be set.
   "message" : <string>
 
   "seq-rp" : <uint64_t>
