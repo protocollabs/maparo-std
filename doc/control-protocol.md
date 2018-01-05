@@ -135,10 +135,12 @@ blank:
 - `2`: rtt reply
 - `3`: info request
 - `4`: info reply
-- `5`: module start request
-- `6`: module start reply
-- `7`: module stop request
-- `8`: module stop reply
+- `5`: measurement start request
+- `6`: measurement start reply
+- `7`: measurement info request
+- `8`: measurement info reply
+- `9`: measurement stop request
+- `10`: measurement stop reply
 - `255`: warning and error message
 
 
@@ -349,16 +351,16 @@ program start for example.
 ![image](images/control-time-measurement.svg)
 
 
-### Module Start
+### Measurement Start
 
 Used to start module on server.
 
-The module-start message is self-contained. All server actions depends on this
+The Measurement-start message is self-contained. All server actions depends on this
 message and are stateless. There is no need for the server to store information
 from previous rtt-request, info-request or any other messages. This behavior
 is intended.
 
-#### Module Start Request
+#### Measurement Start Request
 ```
 {
   # The Id identify the reply node uniquely. The id is generated in indentical
@@ -388,11 +390,11 @@ is intended.
 }
 ```
 
-#### Module Start Reply
+#### Measurement Start Reply
 
-A server MUST answer to a start-request with a start-reply *after* all systems
-are started and ready to serve the client. A server MUST NOT start the subsystems
-afterwards.
+A server MUST answer to a Measurement-start request with a Measurement start reply
+*after* all systems are started and ready to serve the client. A server MUST NOT
+start the subsystems afterwards.
 
 Background:
 
@@ -435,9 +437,14 @@ other clients are able to connect and use the service.
 }
 ```
 
-### Module Stop
+### Measurement Info
 
-#### Module Stop Request
+Measurment info messages are used to gather measurement data during an
+ongoing measurement without stoping the active measurement.
+
+### Measurement Stop
+
+#### Measurement Stop Request
 
 The module stop-request must be from the identical start-request sender. The
 source IP doesn't matter. The id is important. The server MUST ignore packages
@@ -453,7 +460,13 @@ new module-start sequence.
 }
 ```
 
-#### Module Stop Reply
+#### Measurement Stop Reply
+
+Most important rule: the server don't know when the measurement is over! Only
+the client knows this information. When a measurement is over is dictated by
+the client.
+
+
 
 ```
 {
