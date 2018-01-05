@@ -391,13 +391,31 @@ is intended.
   # If later a absolute time is required a "measurement-delay-time"
   # parameter can be added.
   "measurement-delay" : <uint32_t>
+  
+  # seconds after which the measurement is guaranteed not active
+  # and finished. The server can close all resourches allocated
+  # at measurement start time like open sockets, etc.
+  # Normally a measurment-stop command frees all resourches at
+  # server side. But UDP multicast setups in packet loss environments
+  # the stop may get lost. The client is only able to estimate how
+  # long a measurment will be.
+  # If nothing is specified the default should be 5 minutes.
+  # The server may - also depending on the actual measurment -
+  # adjust the time maximum.
+  # A server is free to reject measurment-time-max values out
+  # out scope. E.g. if a user want to block a server for 20 minutes
+  # or so. (see "secret" for a better option")
+  # "measurement-time-max" is started after "measurement-delay" is 0.
+  # Or in other words: after the measurment is actual started.
+  "measurement-time-max" : <uint32_t>
 
   # the module specific configuration
   module = {
-    "name" : <module-name>
-    # the config for the module
-		"configuration" : {
-    }
+        # the config for the module
+        "name" : <module-name>
+        # a module specific configuration encoded as valid JSON
+        "configuration" : {
+       }
   }
 }
 ```
