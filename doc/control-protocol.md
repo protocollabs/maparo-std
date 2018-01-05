@@ -415,8 +415,8 @@ is intended.
   "measurement-time-max" : <uint32_t>
 
   # the module specific configuration
-  module = {
-        # the config for the module
+  "measurement" = {
+        # the config for the module or campaign
         "name" : <module-name>
         # a module specific configuration encoded as valid JSON
         "configuration" : {
@@ -500,6 +500,9 @@ new module-start sequence.
 
 ```
 {
+  "id" : "hostname=uuid",
+  "seq" : <uint64_t>
+  "secret" : <string>
 }
 ```
 
@@ -521,5 +524,13 @@ the client.
   "status" : <status>
 
   "seq-rp" : <uint64_t>
+
+  # the module specific configuration
+  "measurement" = {
+        "name" : <module-name>
+        # the output data
+        "data" : {
+       }
+  }
 }
 ```
