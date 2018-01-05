@@ -379,8 +379,20 @@ is intended.
   # If the server has no configured secret but the client sent a
   # secret, then the server SHOULD accept the request.
   "secret" : <string>
+  
+  # if the measurment should start delayed a value in seconds
+  # can be given. This is only usefull where the server starts
+  # the measurment action (e.g. sending data from server to client)
+  # and where probably multiple servers should starts somehow
+  # synchronously.
+  # If the server starts several measurment-start requests to
+  # increase robustness the measrument-delay time must be adjusted
+  # by the client.
+  # If later a absolute time is required a "measurement-delay-time"
+  # parameter can be added.
+  "measurement-delay" : <uint32_t>
 
-  #
+  # the module specific configuration
   module = {
     "name" : <module-name>
     # the config for the module
