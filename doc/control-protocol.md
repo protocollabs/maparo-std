@@ -427,7 +427,7 @@ is intended.
 
 #### Measurement Start Reply
 
-A server MUST answer to a Measurement-start request with a Measurement start reply
+A server MUST answer to a measurement-start request with a measurement start reply
 *after* all systems are started and ready to serve the client. A server MUST NOT
 start the subsystems afterwards.
 
@@ -447,6 +447,14 @@ other clients are able to connect and use the service.
 > This can be implemented by spanning a timer and if within n minutes no packages
 > arrived the server should cancel the state and switch to the initial state.
 
+After a measurment was started and additional measurment-start are received the
+server MUST react in the following manner:
+
+- if the measurment-start-reqest was sent from the same <id> and the identical
+  measurment was requested the server must answer with measurment-start-reply
+  with status "ok"
+- if the measurment is from the another client instance or the measurement
+  is another the server should return with status code busy.
 
 ```
 {
