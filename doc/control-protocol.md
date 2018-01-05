@@ -454,5 +454,13 @@ new module-start sequence.
 
 ```
 {
+  "id" : "hostname=uuid",
+
+  # the status of the previous request, can be (lowercase)
+  # - "ok"
+  # - "busy" if another measurement is ongoing
+  "status" : <status>
+
+  "seq-rp" : <uint64_t>
 }
 ```
