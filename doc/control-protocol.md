@@ -23,6 +23,9 @@ The Control Protocol is optional. All implementations are engaged to implement
 a mechanism on server and client side to use the same functionalty without
 the protcol requirements.
 
+The control protocol is designed to work on top of UDP and TCP. Additional
+for UDP the protocol is also designed from the ground up to operate via Multicast.
+
 ## Golden Rule
 
 The Control Protocol MUST never influence the measurment in any way. For
