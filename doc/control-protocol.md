@@ -485,6 +485,38 @@ server MUST react in the following manner:
 Measurment info messages are used to gather measurement data during an
 ongoing measurement without stoping the active measurement.
 
+#### Measurement Info Request
+
+```
+{
+  "id" : "hostname=uuid",
+  "seq" : <uint64_t>
+  "secret" : <string>
+}
+```
+
+#### Measurement Info Reply
+
+The server SHOULD only return measurement info if the id is identical
+to the measurement-start id. I.e. no other client should be able
+to get live measurment data.
+
+```
+{
+  "id" : "hostname=uuid",
+  "seq" : <uint64_t>
+  
+  "seq-rp" : <uint64_t>
+  
+  # the module specific configuration
+  "measurement" = {
+        "name" : <module-name>
+        # the output data
+        "data" : {
+    
+}
+```
+
 ### Measurement Stop
 
 #### Measurement Stop Request
