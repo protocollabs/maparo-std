@@ -407,6 +407,11 @@ is intended.
   # or so. (see "secret" for a better option")
   # "measurement-time-max" is started after "measurement-delay" is 0.
   # Or in other words: after the measurment is actual started.
+  # If TCP is used for the control protocol the allocated ressourches
+  # can be deallocated if the TCP connection is closed/interrupted.
+  # At the end: a maparo server operated in the internet should behave
+  # save and self-healing under all circumstances: lost UDP control messages,
+  # closed TCP control connections.
   "measurement-time-max" : <uint32_t>
 
   # the module specific configuration
