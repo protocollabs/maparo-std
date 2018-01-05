@@ -57,6 +57,19 @@ from multicast to unicast adressing.
 > and filter the results later if several servers are within the multicast
 > domain.
 
+## Control Message Ordering and Sessions
+
+Maparo Control Protocol is stateles - control session do not exist. There
+are also no message order requirements. Clients are free to send whatever
+messages they like. For example: a client can start with a RTT message
+followed by a INFO info or vice versa.
+
+The only "light" exception are module-start and module-stop messages. If
+module-stop messages are transmitted before module-start the server cannot
+answer corretly and will return a failure. But this is *not* handled within
+the control protocol due to session idenfiers, it is handled within the
+server exclusivly based on internal states.
+
 ## Reply Requirements & Behavior
 
 A server **MUST** not answer to a client request. The behavior is not standardized
