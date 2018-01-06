@@ -182,10 +182,10 @@ blank:
 - `2`: info reply
 - `3`: measurement start request
 - `4`: measurement start reply
-- `5`: measurement info request
-- `6`: measurement info reply
-- `7`: measurement stop request
-- `8`: measurement stop reply
+- `5`: measurement stop request
+- `6`: measurement stop reply
+- `7`: measurement info request
+- `8`: measurement info reply
 - `9`: rtt request
 - `10`: rtt reply
 - `255`: warning and error message
