@@ -60,6 +60,23 @@ from multicast to unicast adressing.
 > and filter the results later if several servers are within the multicast
 > domain.
 
+## Control Address and Data Address
+
+Beside iperf and other performance measurement programs maparo splits
+control and data channel for maximum flexibility. Most often the control
+and data channels are routed over the same protocol and path. Sometimes
+the setup requires something special. Imagine a network with loss of
+50%, a TCP control channel will not work in such environments. To analyse
+such networks it is required to provide two networks: a test network and
+a control network. To support such environments maparo must differentiate
+control and data plane.
+
+> Example: **Maparo Pulser**
+> Two options are available
+> - addr <addr>
+> - ctrl-addr <addr>
+>
+
 ## Control Message Ordering and Sessions
 
 Maparo Control Protocol is stateles - control session do not exist. There
