@@ -178,16 +178,16 @@ different.
 In `uint32_t`, network byte order, starting with 1, 0 is intentionally left
 blank:
 
-- `1`: rtt request
-- `2`: rtt reply
-- `3`: info request
-- `4`: info reply
-- `5`: measurement start request
-- `6`: measurement start reply
-- `7`: measurement info request
-- `8`: measurement info reply
-- `9`: measurement stop request
-- `10`: measurement stop reply
+- `1`: info request
+- `2`: info reply
+- `3`: measurement start request
+- `4`: measurement start reply
+- `5`: measurement info request
+- `6`: measurement info reply
+- `7`: measurement stop request
+- `8`: measurement stop reply
+- `9`: rtt request
+- `10`: rtt reply
 - `255`: warning and error message
 
 
