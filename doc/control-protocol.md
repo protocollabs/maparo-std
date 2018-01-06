@@ -465,6 +465,7 @@ is intended.
   "measurement" = {
         # the config for the module or campaign
         "name" : <module-name>
+        "type" : "module"
         # a module specific configuration encoded as valid JSON
         "configuration" : {
        }
