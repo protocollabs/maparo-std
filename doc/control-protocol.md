@@ -87,6 +87,17 @@ To discover maparo servers the ctrl address can be a multicast addresses.
 To discover both IPv4 and IPv6 only hosts the control address can be a list.
 E.g. `--ctrl-addr FF02::1,224.0.0.1`
 
+If a data address is given the address has precedence and MUST overwrite
+the control address if the control address is a multicast address. If the
+control address is a unicast address both addresses MUST be untouched.
+
+If no control address given (None) the application SHOULD take the data
+address.
+
+> This is the standard behavior and is what the user expect! In 90% of
+> all use cases the measurment and control network is identical. The user
+> should not be enforced to specify the same address for unicast and
+> multicast twice.
 
 
 ## Control Message Ordering and Sessions
