@@ -57,7 +57,7 @@ It is possible that after a certain discovery phase (most likely INFO-REQUEST,
 INFO-REPLY) and the "most wanted" server is selected the addressing change
 from multicast to unicast adressing.
 
-> There is no need to send RTT request/reply probes to an multicast address
+> There is no need to send Time Diff request/reply probes to an multicast address
 > and filter the results later if several servers are within the multicast
 > domain.
 
@@ -112,7 +112,7 @@ it is unlikely that a user what this.
 
 Maparo Control Protocol is stateles - control session do not exist. There
 are also no message order requirements. Clients are free to send whatever
-messages they like. For example: a client can start with a RTT message
+messages they like. For example: a client can start with a Time Diff message
 followed by a INFO info or vice versa.
 
 The only "light" exception are module-start and module-stop messages. If
@@ -187,8 +187,8 @@ blank:
 - `6`: measurement stop reply
 - `7`: measurement info request
 - `8`: measurement info reply
-- `9`: rtt request
-- `10`: rtt reply
+- `9`: time-diff request
+- `10`: time-diff reply
 - `255`: warning and error message
 
 
@@ -197,18 +197,18 @@ blank:
 
 ![image](images/control-example.svg)
 
-### RTT Messages
+### Time Diff Messages
 
 The first 4 bytes of the payload contains a network byte order encoded length of
 the payload len, not including this "header".
 
-The first RTT message CAN be ignored to bypass measurement jitter because of unwarmed
+The first Time Diff message CAN be ignored to bypass measurement jitter because of unwarmed
 caches, arp/nd setup, xinitd init sequences and other effects.
 
-The client can use RTT message several times to increase the precicion of
+The client can use Time Diff message several times to increase the precicion of
 measurements.
 
-#### RTT Request
+#### Time Diff Request
 
 ```
 {
@@ -264,7 +264,7 @@ measurements.
 ```
 
 
-#### RTT Reply
+#### Time Diff Reply
 
 The reply host CAN implement a ratelimiting component.
 
@@ -405,7 +405,7 @@ Used to start module on server.
 
 The Measurement-start message is self-contained. All server actions depends on this
 message and are stateless. There is no need for the server to store information
-from previous rtt-request, info-request or any other messages. This behavior
+from previous time-diff-request, info-request or any other messages. This behavior
 is intended.
 
 #### Measurement Start Request
