@@ -99,6 +99,13 @@ address.
 > should not be enforced to specify the same address for unicast and
 > multicast twice.
 
+If no data address is given it should auto discover the data address
+by using discovery service by control address.
+
+If no data and no control address is given the application should give
+up. Alternatively the application can use `::1` or `127.0.01`. Although
+it is unlikely that a user what this.
+
 
 ## Control Message Ordering and Sessions
 
