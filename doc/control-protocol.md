@@ -10,7 +10,8 @@ using USB stick or some other transfer method.
 
 The default control port is **64321**
 
-The *secret* MUST be supported by every message.
+The *secret* MUST be supported by every message. But it can be left out if
+not used.
 
 The server MUST response to each message - unique identified by the sequence
 number - exactly once. The server MUST not response multiple times to one
