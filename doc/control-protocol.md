@@ -72,10 +72,22 @@ a control network. To support such environments maparo must differentiate
 control and data plane.
 
 > Example: **Maparo Pulser**
-> Two options are available
-> - addr <addr>
-> - ctrl-addr <addr>
 >
+> Two options are available
+> - addr
+> - ctrl-addr
+>
+> If no addr is given (None), the addr can be derived from info-reply
+> message originator addresses. This is an implementation detail.
+
+If it is a multicast measurement the addr must be given. The ctrl-addr
+must be a multicast address to. It SHOULD be the identical multicast address.
+
+To discover maparo servers the ctrl address can be a multicast addresses.
+To discover both IPv4 and IPv6 only hosts the control address can be a list.
+E.g. `--ctrl-addr FF02::1,224.0.0.1`
+
+
 
 ## Control Message Ordering and Sessions
 
