@@ -27,6 +27,14 @@ the protcol requirements.
 The control protocol is designed to work on top of UDP and TCP. Additional
 for UDP the protocol is also designed from the ground up to operate via Multicast.
 
+UDP for discovery is fine, but for control communication a client/server should
+prefer TCP for reliable communication - if any possible. Normally a UDP based
+communication for standard request/reply flow is fine, at least when collected
+data must be transfered back from server to client at measurement stop and if
+the collected data is larger as MTU sized packets a reliable control channel is
+required. This can be done with UDP and implement all the fancy stuff, at the
+and what is implemented looks like TCP - why not take TCP for all control activity?
+
 ## Golden Rule
 
 The Control Protocol MUST never influence the measurment in any way. For
