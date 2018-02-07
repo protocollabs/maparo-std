@@ -1,6 +1,6 @@
-# Control Protocol
+# Maparo Control Protocol Definition
 
-## Basics
+## Essential Characteristics
 
 Each server - started with argument `remote` listening on a TCP _and_ UDP port
 for incoming control messages. The control protocol is fully optional, each
@@ -8,21 +8,31 @@ operation must be possible without a control protocol, though the program
 arguments must be set manually and the result set must be merged manually by
 using USB stick or some other transfer method.
 
-The default control port is **64321**
+The default control port for TCP and UDP is 64321. The control port can be
+adjusted to any other port. The control *should* listen to unicast and
+multicast and bind to the wildcard address. Supporting IPv4 and IPv6. The
+network protocol *should* be selectable to disable IPv4/IPv6 if required.
 
-The *secret* MUST be supported by every message. But it can be left out if
-not used.
 
-The server MUST response to each message - unique identified by the sequence
+To protect public servers the control must support a secret mechanism. It
+is intended not a cryptographic mechanism because multicast and cryptographic
+is somehow hard to do. Also for unicast encryption with a TLS like mechanism
+certificates must be setup which is not always possible and increase the
+complexity. Maparo is a control application and used in walled environments.
+The secret mechanism is comparable to SNMPv1 with the community string - not
+more.
+
+The server must response to each message - unique identified by the sequence
 number - exactly once. The server MUST not response multiple times to one
 sequence number.
 
 > To increase robustness for lossy links the client may send several requests
-> with increasing sequence number.
+> with increasing sequence number. The server *should* drop packets with already
+> processed sequence numbers.
 
 The Control Protocol is optional. All implementations are engaged to implement
-a mechanism on server and client side to use the same functionalty without
-the protcol requirements.
+a mechanism on server and client side to use the same functionality without
+the protocol requirements.
 
 The control protocol is designed to work on top of UDP and TCP. Additional
 for UDP the protocol is also designed from the ground up to operate via Multicast.
@@ -35,17 +45,17 @@ the collected data is larger as MTU sized packets a reliable control channel is
 required. This can be done with UDP and implement all the fancy stuff, at the
 and what is implemented looks like TCP - why not take TCP for all control activity?
 
-## Golden Rule
+## Golden Rule of Operation
 
-The Control Protocol MUST never influence the measurment in any way. For
-example: during a TCP measurment the control protocol must absolutely
+The Control Protocol MUST never influence the measurement in any way. For
+example: during a TCP measurement the control protocol must absolutely
 do nothing - no transmission at all. This is especially important if
-test are done in envionments with only several kb bandwidht.
+test are done in environments with only several kb bandwidth.
 
-The only exceptions are explizit switches where the user is explicetly
+The only exceptions are explicit switches where the user is explicitly
 informed that control traffic is not send over the wire. Use cases where
 permanent protocol exchange is required are progress bars where status
-(transfered bytes) are updated live at client side, without waiting
+(transferred bytes) are updated live at client side, without waiting
 until the transmission is ready.
 
 ## Unicast
@@ -417,6 +427,7 @@ from previous time-diff-request, info-request or any other messages. This behavi
 is intended.
 
 #### Measurement Start Request
+
 ```
 {
   # The Id identify the reply node uniquely. The id is generated in indentical
@@ -600,7 +611,6 @@ new module-start sequence.
 Most important rule: the server don't know when the measurement is over! Only
 the client knows this information. When a measurement is over is dictated by
 the client.
-
 
 
 ```
