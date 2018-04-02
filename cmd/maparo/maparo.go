@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/protocollabs/maparo/core"
+	"github.com/protocollabs/maparo/core/log"
 	"github.com/protocollabs/maparo/mods"
 )
 
@@ -75,7 +76,9 @@ func mode_mod(name string) {
 }
 
 func main() {
-	fmt.Fprintf(os.Stderr, "mapago(c) - 2017\n")
+	var log = log.New()
+	log.Debugf("xx")
+	fmt.Fprintf(os.Stderr, "mapago(c) - 2017,2018\n")
 	fmt.Fprintf(os.Stderr, "build version: %s\n", core.BuildVersion)
 	fmt.Fprintf(os.Stderr, "build date:    %s\n", core.BuildDate)
 
