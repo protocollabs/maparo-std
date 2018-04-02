@@ -15,8 +15,8 @@ synchronization mechanisms - but we can't.
 
 ## Exchanged Time Format
 
-If time is exchanged via JSON the format must be UTC and with a resulution
-of microseconds:
+If time is exchanged via JSON the format must be UTC. The time resultion should
+be in nanoseconds:
 
 ```
 2017-12-16T12:32:42.763987000
