@@ -20,6 +20,10 @@ type Mod interface {
 // Modules. Simple typedef then
 type Campaign Mod
 
+var (
+	errProjectNotFound    = fmt.Errorf("could not find project")
+)
+
 func parse_args() (string, error) {
 	if len(os.Args) > 1 {
 		return os.Args[1], nil
