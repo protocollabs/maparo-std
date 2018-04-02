@@ -1,109 +1,121 @@
 # Maparo
 
-## Installation
+- [command-line-interface.md](command-line-interface.md)
 
-You can use pre-compiled releases compiled for Linux, Mac and Windows.
+## Control Protocol
 
-> Note: the feature set is not identical on all platforms. The module
-> help describe all pitfalls.
+- [control-protocol.md](control-protocol.md)
 
-## Design Principles
+## Modules
 
-- Modules can be used in parallel with other modules. Modules can be initiated
-  several times. This allows more complex campaigns like *Realtime Response Under
-  Load (RRUL)* like FLENT is doing.
-- *Maparo* return either a JSON set or human formatted data. *Maparo* do
-  not draw or visualize any data. To visualize data you can use Python
-  scripts using the powerful and flexible matplotlib library.
-- *Maparo* do not focus on collection OS internal stats for further analysis
-  for now. This can later be added.
+- [TCP Goodput (tcp-goodput)](mod-tcp-goodput.md)
+- [UDP RTT (udp-rtt)](mod-udp-rtt.md)
+- [UDP Ping (udp-ping)](mod-udp-ping.md)
+- [UDP Mcast Spray (udp-mcast-spray)](mod-udp-mcast-spray.md)
 
-## Using Maparo from Third Party Tools/Scripts Automatically
+> Common used modules are named shorter/snappy, rarely use modules named
+longer
 
-Maparo will exit with return code 0 if everything went fine. If not return code 1 signals
-the script that something went wrong. To communicate error, warning and debugging
-information to the outside *maparo* will use STDERR. STDOUT is just use for analysis
-data. This a script can trust that the outputed string is a pure JSON string (if enabled)
-and not garbaged with other information.
+## Campaigns
 
-```
-maparo <args> | python3 graph-script.py -o output.png
-```
+**WIP:** Campaigns are not shared or/and standardized. Campaings consists
+of modules. Modules are standardized and can be queried. A campaign can
+get supported modules from a peer and can start a campaign if all required
+modules are supported by a peer/server.
 
-## Parsing Format
+## Misc
 
-*Maparo* will print out the results and the input parameters as well as other
-gathered system parameters if JSON is the output format:
+- There is not output in between measurement. Why: because the control
+  channel is not used. Only after measurement the control channel is used
+	to exchange the measurement data back to the client. The client is free
+	to print status information if the cpu load is not noticable affected.
 
-```
-{
-  "version" = "semver value",
-  "system" = {
-  },
-  "input" = {
-    // flaten config, if only one module is
-    // used the module config including name is
-    // printed. If a campaign is used the serialized
-    // campaign included config values is printed 
-    "mod-tcp-goodput" = {
-    },
-  },
-  "output" : {
-  },
-}
-```
+### Time
 
-## Development
+All internally measured and transferred timevalue should use a realtime clock
+(`CLOCK_REALTIME`). `CLOCK_MONOTONIC` principle be used if a clean synchronization
+between client and server can de done. This is principle be true for remote mode.
+But because the time synchronization is a) not that accurate as required and b) not
+possible at all if operated in a non-remote mode.
 
-### Install binary via
+The only solution is to ignore this within maparo. If a high resolution timing
+analysis between client and server is required the only solution is to use GPS
+mouses and disable gpsd for the time of measurement to do not risk NTP
+adjustments.
+
+`CLOCK_MONOTONIC_RAW` would be fine if we can build upon maparo internal time
+synchronization mechanisms - but we can't.
+
+Use: `
+
+### Exchanged Time Format
+
+If time is exchanged via JSON the format must be UTC and with a resulution
+of microseconds:
 
 ```
-go get github.com/protocollabs/maparo/...
+2017-12-16T12:32:42.763987000
 ```
 
-### Prepare Development Environment
+Implementations SHOULD check the number of digits of the fractions. If the number
+is six then microseconds is used. If 9 digits it should be interpreted as nanoseconds.
 
-For Debian based systems install go suite:
+With Python3:
 
-```
-sudo apt-get install golang-go
-```
-
-
-# Links and Referrences
-
-## Go Networking Examples
-
-- https://github.com/golang/net/blob/master/ipv4/example_test.go
-
-## Plotting Ideas
-
-If the JSON output includes information what module/campaign
-was called and all information is available (i.e. remote call,
-client and server json in one json structure it is possible to
-pipe the data to a python3 script. The Python3 script will
-visualize and output the information.
-
-```
-# server
-maparo daemon
-
-# client
-mapago module tcp-througput format=json conf.dst=::1 | mapago-chart --output-dir tcp-througput
-
-$ ls tcp-througput
-tcp-througput-over-time.data
-tcp-througput-over-time.py
-tcp-througput-over-time.png
-
-tcp-througput-info.data
-tcp-througput-info.py
-tcp-througput-info.png
-
-[...]
+```python
+import datetime
+dt = datetime.datetime.utcnow()
+print(dt.strftime('%Y-%m-%dT%H:%M:%S.%f'))
 ```
 
-- http://blog.enthought.com/general/visualizing-uncertainty/
-- https://plot.ly/python/box-plots/
-- http://jonchar.net/notebooks/matplotlib-styling/
-- http://people.duke.edu/~ccc14/pcfb/numpympl/MatplotlibBarPlots.html
+# Cross Platform Functionality
+
+Not all features are supported at every platform. These features
+must be described and named explicitly.
+
+## Principles
+
+- Keep the serve size simple and configuration free from configuration
+  effort. The configuration should be keep as simple as possible at the
+  server side, should be done on the client side and as automatically as
+  possible.
+
+
+# Shared Functionality
+
+## Payload Pattern
+
+Maparo pre-defines several payload pattern to be
+used in each module.
+
+The pattern is true for one "chunk". One chunk is one pre allocated buffer and
+is typically one UDP packet or one large (max 4 GB) TCP chunk. Chunks are
+reused and pattern are not recalculated -> identical. This is for performance
+aspects because randomizing and touching chunks are CPU intensive and may lower
+the network performance. I don't see any network measurement advantageous where
+recalculating is required. Often optimizer and gzip for UDP work on a packet
+level and for TCP the chunk size can be quite large so there is no real problem
+with this limitation.
+
+# Zero
+
+Just 0 for the complete payload
+
+Name: `zero`
+
+### Random ASCII (letter)
+
+Randomized string with `a-zA-Z0-9`. No Unicode
+
+Name: `random-ascii`
+
+### Random 
+
+Random is a pure random byte.
+
+Name: `random`
+
+The generator tries to use the most cryptographic random bytes from the
+underlying operating system (e.g. `/dev/random` seed combined with AES)
+
+
