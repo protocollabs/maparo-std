@@ -41,3 +41,12 @@ import "fmt"
 t = time.Now().UTC()
 fmt.Println(t.Format("2006-01-02T15:04:05.000000000"))
 ```
+
+and reverse
+
+```go
+ret, err := time.Parse("2006-01-02T15:04:05.000000000" , t)
+if err != nil {
+	// do what you want
+}
+```
