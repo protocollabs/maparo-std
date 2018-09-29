@@ -26,15 +26,16 @@ simple data exchange it has some novel features.
 
 ## Measurement Start Request
 
+
 ```
 {
-  # per default one TCP transmitter is started, to spawn exactly
+	# per default one TCP transmitter is started, to spawn exactly
 	# to much threads are cores are available use "cores".
 	# Use "threads" if you want to fully utilize all virtual cores,
 	# including hyperthreads.
 	# If the system has several sockets, all sockets are utilized for
 	# "cores" and "threads".
-	"worker" : "1"
+	"streams" : "1"
 
 	# payload pattern. Default is zeroized because we want to fullfill
 	# the pipe and offload as much as possible. 
@@ -46,22 +47,25 @@ simple data exchange it has some novel features.
 
 ```
 {
-  "workers" :
+  "streams" :
   [
-		"listen-port" : "<port>"
+		{ "listen-port" : "<port>" }
 	],
 }
 ```
+
 
 ## Measurement Info Reply
 
 ```
 {
-  "workers" :
+  "streams" :
   [
-		"packet-timestamp-firs" : "<maparo-time>"
-		"packet-timestamp-last"  : "<maparo-time>"
+	  {
+		"timestamp-first" : "<maparo-time>"
+		"timestamp-last"  : "<maparo-time>"
 		"received-bytes" :      "<uint64_t>"
+		}
 	],
 }
 ```
