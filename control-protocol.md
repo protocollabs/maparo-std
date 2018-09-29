@@ -355,9 +355,15 @@ address if it is a multicast module or unicast if UDP unicast analysis.
 
 #### Info Reply
 
-| Field Name  | Required |
-| ----------- | -------- |
-| `id` | yes |
+| Field Name            | Required |
+| --------------------- | -------- |
+| `id`                  | yes |
+| `seq-rq`              | yes |
+| `modules`             | yes |
+| `control-protocol`    | no  |
+| `arch`                | no  |
+| `os`                  | no  |
+| `info`                | no  |
 
 Generated from server, sent to TCP unicast address or UDP unicast
 address. The address is the sender ip address.
@@ -373,15 +379,46 @@ program start for example.
   # way as the info-request id.
   "id" : "hostname=uuid",
 
-  # the RePlied sequence number from the sender
-  "seq-rp" : <uint64_t>
+  # the RePlied sequence number from the sender, the number is encoded as as
+  # string. (E.g. "seq-rp" : "392192")
+  "seq-rp" : "<uint64_t>"
 
   # list of supported modules, the entries must point to empty dictionaries
   # for now. Later the empty dictionaries can be filled if additional
-  # information is required.
+  # information is required. The module specific info within the dictionary is
+  # specified in the particular module specification. E.g. the "tcp-goodput"
+  # module has a section which specifies allowed values for the tcp-goodput
+  # module.
   "modules" : {
      "udp-goodput" : { },
      "tcp-goodput" : { },
+  }
+
+  # The info-reply SHOULD return a "control-protocol" block where all supported
+  # control protocols are listed. The only supported attribute is port for now.
+  # The internet protocol (IPv4, IPv6) is not covered YET. Later it can probably
+  # a IP list be specified. The control protocol should be extended later if a
+  # certain maturity level is reached.
+  # The following examples illustrates a server with support for UDP, TCP and UDP
+  # UDP Multicast. Each listening on port 64321 for control messages. If IPv4 and
+  # IPv6 is supported and on which unicast address is not specified.
+  "control-protocol" : {
+        # supported control transport protocols and info
+	      "transport" : {
+						"udp" : {
+								"port" : "64321",
+						}
+						"udp-mcast" : {
+								"port" : "64321",
+						}
+						"tcp" : {
+								"port" : "64321",
+						}
+        }
+        # the server "reacts" to the following control message types:
+        "message-types" : [
+            "info", "measurement-start", "measurement-stop", "measurement-info", "time-diff"
+        ]
   }
 
   # Valid values:
