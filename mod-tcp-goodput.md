@@ -2,17 +2,22 @@
 
 ## Description
 
-TCP Goodput can be considered as maparos iperf
-replacement. It sent and receives TCP data. Beside
-simple data exchange it has some novel features.
+TCP Goodput can be considered as maparos iperf replacement. It sent and
+receives TCP data. Beside simple data exchange it has some novel features.
+
+> Note: `tcp-goodput` is limited to receive data send from client toward
+> server. The server simple discards the received data and never sends data
+> back. For additional measurements new modules must be speciefied and added.
+> This is an rather simple module. Implementable with reduced effort with all
+> major programming languages and operating systems.
 
 ## Features
 
-- Payload pattern: zeroized, random ASCII, full rand
-- Configurable DSCP value (if OS support)
+- Payload pattern: zeroized, random ASCII, full rand (client side)
+- Configurable DSCP value (if OS support, client side)
 - Flexible traffic exchange configuration possibilies
 - Setting No Delay
-- Setting Maximum Setnet Size
+- Setting Maximum Segmet Size
 - Goodput Limit configuration support. For TCP this is somewhat
   hacky. Especially for high data rates the userspace interaction can
   limit the overall system performance. So consider this feature as
@@ -23,45 +28,63 @@ simple data exchange it has some novel features.
 - Selectable congestion control algorithm
 - Parallel Workers (thread support)
 
+## Name
+
+This module is standardized with the name:
+
+```
+tcp-goodput
+```
 
 ## Measurement Start Request
 
+### Info Reply
+
+`tcp-goodput` has no additional information for the client. The `tcp-goodput`
+dictionary MUST be empty.
+
+E.g.
+
+```
+[]
+  "id" : "hostname=uuid",
+  "seq-rp" : <uint64_t>
+  "modules" : {
+     "tcp-goodput" : { "cores" : "4" },
+  }
+[]
+```
+
+### Measurement Start Request
+
 ```
 {
-  # per default one TCP transmitter is started, to spawn exactly
-	# to much threads are cores are available use "cores".
-	# Use "threads" if you want to fully utilize all virtual cores,
-	# including hyperthreads.
-	# If the system has several sockets, all sockets are utilized for
-	# "cores" and "threads".
-	"worker" : "1"
-
-	# payload pattern. Default is zeroized because we want to fullfill
-	# the pipe and offload as much as possible. 
-	"payload-pattern" : "zeroized"
+	"streams" : "1"
 }
 ```
-
 ## Measurement Start Reply
 
 ```
 {
-  "workers" :
+  "streams" :
   [
-		"listen-port" : "<port>"
+		{ "listen-port" : "<port>" }
 	],
 }
 ```
+
 
 ## Measurement Info Reply
 
 ```
 {
-  "workers" :
+  "streams" :
   [
-		"packet-timestamp-firs" : "<maparo-time>"
-		"packet-timestamp-last"  : "<maparo-time>"
+	  {
+		"timestamp-first" : "<maparo-time>"
+		"timestamp-last"  : "<maparo-time>"
 		"received-bytes" :      "<uint64_t>"
+		}
 	],
 }
 ```

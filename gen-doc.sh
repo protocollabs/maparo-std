@@ -15,3 +15,5 @@ cat time.md >> maparo-spec.md
 sed -i '/.svg/d' maparo-spec.md
 
 pandoc maparo-spec.md --toc --pdf-engine=xelatex -o maparo-spec.pdf
+
+rm -f maparo-spec.md
