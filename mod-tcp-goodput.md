@@ -24,7 +24,7 @@ simple data exchange it has some novel features.
 - Parallel Workers (thread support)
 
 
-## Configuration
+## Measurement Start Request
 
 ```
 {
@@ -42,6 +42,32 @@ simple data exchange it has some novel features.
 }
 ```
 
+## Measurement Start Reply
+
+```
+{
+  "workers" :
+  [
+		"listen-port" : "<port>"
+	],
+}
+```
+
+## Measurement Info Reply
+
+```
+{
+  "workers" :
+  [
+		"packet-timestamp-firs" : "<maparo-time>"
+		"packet-timestamp-last"  : "<maparo-time>"
+		"received-bytes" :      "<uint64_t>"
+	],
+}
+```
+
 ## Not Supported
 
-- Ignore <n> seconds from start of measuremtn. This must be done by analysis tooling
+- Ignore <n> seconds from start of measurement. This must be done by analysis tooling
+
+

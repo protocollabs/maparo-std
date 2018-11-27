@@ -30,9 +30,12 @@ All UDP features of nuttcp should be supported, e.g.: `nuttcp -l8972 -T30 -u
 	# "cores" and "threads".
 	"worker" : "1"
 
+  # FIME: the server MUST dictate the port, because the port MAY
+	# be used by another service. See the mod-tcp-goodput.
+	# so the following is not wrong and must be updted
   # port for listening and sending. If worker is larger as 1 subsequent
 	# ports are used. E.g. 7001, 7002, ...
-	"port" : "7000"
+	# "port" : "7000"
 
 	# payload pattern. Default is zeroized because we want to fullfill
 	# the pipe and offload as much as possible. 
@@ -106,54 +109,14 @@ The server is the receiving host
 {
   "measurement" : [
 		{
-			"first-packet-timestamp" : "2017-05-14T23:55:00.123456789Z",
-			"last-packet-timestamp" : "2017-05-14T23:55:10.123456789Z",
-			"bytes-received: "23923932",
-			"packets-received: "1922",
+			"packet-timestamp-first" : "2017-05-14T23:55:00.123456789Z",
+			"packet-timestamp-last" : "2017-05-14T23:55:10.123456789Z",
+			"received-bytes" : "23923932",
+			"received-packets" : "1922",
 		}
 	]
 }
 ```
-
-For continious mode the returned data is accumulated:
-
-```
-{
-  "measurement" :
-	[
-		{
-			"first-packet-timestamp" : "2017-05-14T23:55:00.123456789Z",
-			"last-packet-timestamp" : "2017-05-14T23:55:01.123456789Z",
-			"bytes-received: "32",
-			"packets-received: "22",
-		}
-	],
-	[
-		{
-			"first-packet-timestamp" : "2017-05-14T23:55:00.123456789Z",
-			"last-packet-timestamp" : "2017-05-14T23:55:05.123456789Z",
-			"bytes-received: "23932",
-			"packets-received: "922",
-		}
-	],
-	[
-		{
-			"first-packet-timestamp" : "2017-05-14T23:55:00.123456789Z",
-			"last-packet-timestamp" : "2017-05-14T23:55:10.123456789Z",
-			"bytes-received: "23923932",
-			"packets-received: "1922",
-		}
-	],
-}
-```
-
-The last data entries are added. The analyser is able to draw charts or do
-other analysis based on the history of the data. There is no partial message
-format. The idea is that the format is unique for remote and manual
-mode: remote where the JSON is synched back to the client every n seconds
-and the manual mode where the whole data set is later copied manually
-to the client. At the end the identical information must be available.
-
 
 
 # Output Format

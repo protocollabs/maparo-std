@@ -320,7 +320,6 @@ The server is free to ignore payloads larger as MTU sized packets bytes.
 | ----------- | -------- |
 | `id` | yes |
 | `seq` | yes |
-| `measurement-id` | yes |
 | `ts` | no (optional) |
 
 Generated from client, sent to TCP unicast address or UDP multicast
@@ -523,7 +522,7 @@ is intended.
   # If the server has no configured secret but the client sent a
   # secret, then the server SHOULD accept the request.
   "secret" : <string>
-  
+
   # if the measurment should start delayed a value in seconds
   # can be given. This is only usefull where the server starts
   # the measurment action (e.g. sending data from server to client)
@@ -535,7 +534,7 @@ is intended.
   # If later a absolute time is required a "measurement-delay-time"
   # parameter can be added.
   "measurement-delay" : <uint32_t>
-  
+
   # seconds after which the measurement is guaranteed not active
   # and finished. The server can close all resourches allocated
   # at measurement start time like open sockets, etc.
@@ -559,13 +558,9 @@ is intended.
   "measurement-time-max" : <uint32_t>
 
   # the module specific configuration
-  "measurement" = {
-        # the config for the module or campaign
-        "name" : <module-name>
-        "type" : "module"
-        # a module specific configuration encoded as valid JSON
-        "configuration" : {
-       }
+  "data" = {
+       # see protocol specific section, e.g.
+       # mod-tcp-goodput.md and "Measurement Start Request"
   }
 }
 ```
@@ -617,14 +612,25 @@ server MUST react in the following manner:
   #          back to request a new module-start measurment.
   # - "warn" if start was sucessfull BUT there not all parameter can be fullfilled
   #          then warn can be used to signal such a condition
-  # - "failed"
-  "status" : <status>
+  # - "failed" if the measurement cannot be started. Another usage: if the measurement-id
+	#            is already in use by this client. E.g. the client do not calculate a new
+	#            measurement-id, the server will response with a "failed" state too.
+  "status" : "<status>"
 
   # a human readable error message WHY it failed. Can be
-  # missing. If status is != ok the message SHOULD be set.
-  "message" : <string>
+  # missing. If status is != ok the message SHOULD be set. Normally
+  # this message SHOULD be printed to the user. The client react to the
+  # status, but the human can interpret the message and take appropiate
+  # steps. E.g. inform the maparo server owner.
+  "message" : "<string>"
 
-  "seq-rp" : <uint64_t>
+  "seq-rp" : "<uint64_t>"
+
+  # the module specific return value
+  "data" = {
+        # see protocol specific section, e.g.
+				# mod-tcp-goodput.md and "Measurement Start Reply"
+  }
 }
 ```
 
@@ -659,16 +665,15 @@ to get live measurement data.
 
   # The measurment id where the info is gattered.
   "measurement-id" : <uint64_t>
-  
+
   "seq-rp" : <uint64_t>
-  
+
   # the module specific configuration, see module specification (e.g.
   # tcp-goodput for one example)
-  "measurement" = {
-        "name" : <module-name>
-        # the output data
-        "data" : {
-    
+  "data" = {
+        # see protocol specific section, e.g.
+				# mod-tcp-goodput.md and "Measurement Info Reply"
+  }
 }
 ```
 
