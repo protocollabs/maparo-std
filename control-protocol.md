@@ -24,11 +24,24 @@ more.
 
 The server must response to each message - unique identified by the sequence
 number - exactly once. The server MUST not response multiple times to one
-sequence number.
+sequence number. The client MUST NOT reuse the same sequence number again, the
+sequence number must always be incremented by the client at each transmission.
 
 > To increase robustness for lossy links the client may send several requests
 > with increasing sequence number. The server *should* drop packets with already
 > processed sequence numbers.
+
+The sequence number serves as a duplicate and reobustness method within the control
+packet sequence. To differentiate two ongoing, parallel measurements the
+sequence number is not suffiently. To identify a measurment uniquely a "measurment-id"
+is required.
+
+> Use case: one client, one server setup. The server start with one UDP goodput
+> measurement and one TCP goodput measurement in parallel. To get info from one
+> particular module the client must identify the particular measurement. The
+> identification of the module like "udp-goodput" is not sufficiently because
+> two udp-goodput modules may operates on the same time. Therefor a 'measurment-id'
+> was introduced.
 
 The Control Protocol is optional. All implementations are engaged to implement
 a mechanism on server and client side to use the same functionality without
@@ -44,6 +57,14 @@ data must be transfered back from server to client at measurement stop and if
 the collected data is larger as MTU sized packets a reliable control channel is
 required. This can be done with UDP and implement all the fancy stuff, at the
 and what is implemented looks like TCP - why not take TCP for all control activity?
+
+If TCP is selected as control protocol the control connection SHOULD stay open
+all the time. This is required to allow the server to send asynchonous messages
+during the measurement. This is required for modules inmplementing a reverse
+transmission (data transmission from server to client) and inform the client when
+finished. The client cannot know this and may poll the server otherwise. Thus,
+it is helpful when the TCP control connection stays open during the complete
+measurment.
 
 ## Golden Rule of Operation
 
@@ -299,6 +320,7 @@ The server is free to ignore payloads larger as MTU sized packets bytes.
 | ----------- | -------- |
 | `id` | yes |
 | `seq` | yes |
+| `measurement-id` | yes |
 | `ts` | no (optional) |
 
 Generated from client, sent to TCP unicast address or UDP multicast
@@ -317,10 +339,8 @@ address if it is a multicast module or unicast if UDP unicast analysis.
   # re-generated at program start
   "id" : "hostname=uuid",
 
-  # a sender may send several request in a row. To address the right one
-  # the reply host will send back the sequence number.
-  #
-  # A receiver MUST answer to one equest exactly once.
+	# A sender may send several request in a row.  # A receiver MUST answer to
+  # one equest exactly once.
   #
   # Sequence numbers are message specific. For example: info request message
   # numbers start with 0, later module-start-request first packet also has
@@ -465,6 +485,16 @@ is intended.
 
 #### Measurement Start Request
 
+| Field Name  | Required |
+| ----------- | -------- |
+| `id` | yes |
+| `seq` | yes |
+| `measurement-id` | yes |
+| `measurement` | yes |
+| `secret` | no |
+| `measurement-delay` | no |
+| `measurement-time-max` | no |
+
 ```
 {
   # The Id identify the reply node uniquely. The id is generated in indentical
@@ -475,6 +505,16 @@ is intended.
   # the client may send several requests. The server SHOULD never reply twice
   # or even more.
   "seq" : <uint64_t>
+
+  # Randomly picked measurement id, stable for one measurment. All
+  # subsequent requsts/replies to the particular message must use this measurment-id.
+  # Think about two parallel ongoing udp-goodput measurements. The client will
+  # alternating query info-reply messages for both ongoing measurements with
+  # both measurement-id's.
+  #
+  # The client dicatates the measurement id for one measurements. The server will
+  # reply this id in the reply message too.
+  "measurement-id" : "<uint64_t>"
 
   # to implement a trivial access mechanism a secret can be given.
   # if the server do not accept the string the request is dropped
@@ -567,6 +607,9 @@ server MUST react in the following manner:
   # way as the info-request id.
   "id" : "hostname=uuid",
 
+  # The replied measurement id from the server.
+  "measurement-id" : <uint64_t>
+
   # the status of the previous request, can be (lowercase)
   # - "ok"
   # - "busy" if another measurement is ongoing and no capacity is available to
@@ -596,6 +639,10 @@ ongoing measurement without stoping the active measurement.
 {
   "id" : "hostname=uuid",
   "seq" : <uint64_t>
+
+  # The measurment id where the info is gattered.
+  "measurement-id" : <uint64_t>
+
   "secret" : <string>
 }
 ```
@@ -604,16 +651,19 @@ ongoing measurement without stoping the active measurement.
 
 The server SHOULD only return measurement info if the id is identical
 to the measurement-start id. I.e. no other client should be able
-to get live measurment data.
+to get live measurement data.
 
 ```
 {
   "id" : "hostname=uuid",
-  "seq" : <uint64_t>
+
+  # The measurment id where the info is gattered.
+  "measurement-id" : <uint64_t>
   
   "seq-rp" : <uint64_t>
   
-  # the module specific configuration
+  # the module specific configuration, see module specification (e.g.
+  # tcp-goodput for one example)
   "measurement" = {
         "name" : <module-name>
         # the output data
@@ -638,6 +688,8 @@ new module-start sequence.
 ```
 {
   "id" : "hostname=uuid",
+  # The measurment id where the info is gattered.
+  "measurement-id" : <uint64_t>
   "seq" : <uint64_t>
   "secret" : <string>
 }
@@ -658,6 +710,9 @@ the client.
   # - "ok"
   # - "busy" if another measurement is ongoing
   "status" : <status>
+
+  # The measurment id where the info is gattered.
+  "measurement-id" : <uint64_t>
 
   "seq-rp" : <uint64_t>
 
