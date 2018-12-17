@@ -672,7 +672,7 @@ to get live measurement data.
   # tcp-goodput for one example)
   "data" = {
         # see protocol specific section, e.g.
-				# mod-tcp-goodput.md and "Measurement Info Reply"
+        # mod-tcp-goodput.md and "Measurement Info Reply"
   }
 }
 ```
@@ -706,6 +706,15 @@ Most important rule: the server don't know when the measurement is over! Only
 the client knows this information. When a measurement is over is dictated by
 the client.
 
+The server may implement a stop mechanism for the case when the client dies
+to free resources after a while. But there can be a general rule or timeout.
+Depending on the test, the network connection and other characteristics this
+timeout can be used.
+
+
+The measurement stop reply MUST return the same 'data' element as the
+measurement info reply message.
+
 
 ```
 {
@@ -721,12 +730,11 @@ the client.
 
   "seq-rp" : <uint64_t>
 
-  # the module specific configuration
-  "measurement" = {
-        "name" : <module-name>
-        # the output data
-        "data" : {
-       }
+  # the module specific configuration, see module specification (e.g.
+  # tcp-goodput for one example)
+  "data" = {
+        # see protocol specific section, e.g.
+        # mod-tcp-goodput.md and "Measurement Info Reply"
   }
 }
 ```
