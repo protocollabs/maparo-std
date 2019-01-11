@@ -30,6 +30,16 @@ All UDP features of nuttcp should be supported, e.g.: `nuttcp -l8972 -T30 -u
 	# "cores" and "threads".
 	"worker" : "1"
 
+
+  # NOTE: I think the port field is outdated here.
+  # In control-protocol.md the Measurement Start Request says
+  #  # the module specific configuration
+  # "data" = {
+  #     # see protocol specific section, e.g.
+  #     # mod-tcp-goodput.md and "Measurement Start Request"
+  # }
+  # in this file the port is part of this configuration, but the port is advertised
+  # in the Meausrement Start Reply not Meausrement Start Request
   # FIME: the server MUST dictate the port, because the port MAY
 	# be used by another service. See the mod-tcp-goodput.
 	# so the following is not wrong and must be updted
