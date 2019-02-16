@@ -1,5 +1,28 @@
 # Maparo
 
+## Abstract
+
+> *Esperanto for Atlas*
+
+Maparo is a network performance measurement protocol specification. Beside
+iperf, netperf and other tools it provides on the control protocol
+specification - not the implementation. Similar to HTTP/2 (RFC 7540) or any
+other networking protocol.
+
+Maparo was designed so that it does not repeat shortcomings and problems of
+known tools. It was designed to be flexible and extensible. The core control
+protocol is keep as simple as possible. The actual workhorses are implemented
+in so called "maparo modules". Some of them are mandatory, many are optional
+and it is also possible to develop completely proprietary modules.
+
+There is one reference implementation: mapago (implemented in go). A Python
+implementation is also available (but protocol support is based on older version
+of maparo).
+
+**KEEP IN MIND:** maparo protocol is not finalized yet. We do our best not to
+change the existing specification, but we cannot rule it out.
+
+
 - [command-line-interface.md](command-line-interface.md)
 
 ## Control Protocol
