@@ -5,9 +5,9 @@
 > *Esperanto for Atlas*
 
 Maparo is a network performance measurement protocol specification. Beside
-iperf, netperf and other tools it provides on the control protocol
+iperf, netperf and other tools it just provides the control protocol
 specification - not the implementation. Similar to HTTP/2 (RFC 7540) or any
-other networking protocol.
+other networking protocol specification.
 
 Maparo was designed so that it does not repeat shortcomings and problems of
 known tools. It was designed to be flexible and extensible. The core control
