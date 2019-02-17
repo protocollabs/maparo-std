@@ -5,19 +5,28 @@
 > *Esperanto for Atlas*
 
 Maparo is a network performance measurement protocol specification. Beside
-iperf, netperf and other tools it just provides the control protocol
-specification - not the implementation. Similar to HTTP/2 (RFC 7540) or any
+iperf, netperf and other tools it just defines the protocol
+specification - not one particular implementation. Similar to HTTP/2 (RFC 7540) or any
 other networking protocol specification.
 
-Maparo was designed so that it does not repeat shortcomings and problems of
-known tools. It was designed to be flexible and extensible. The core control
-protocol is keep as simple as possible. The actual workhorses are implemented
-in so called "maparo modules". Some of them are mandatory, many are optional
-and it is also possible to develop completely proprietary modules.
+Maparo differiantiate between the control protocol (e.g. probe the server or
+start measurement) and the measurement protocol (e.g. tcp stream with sequence
+numbers). The later specification is done in seperate module specifcation.
 
-There is one reference implementation: mapago (implemented in go). A Python
-implementation is also available (but protocol support is based on older version
-of maparo).
+Maparo was designed to be flexible and extensible. Maparo differiantiate
+between the control protocol and the measurement protocol.  The control
+protocol is keep as simple as possible and provides a basis functionality like
+service discovery, measurement start request and so on. It provides the
+transport layer for the module specific measurement protocol. The actual workhorses are
+implemented in so called "maparo modules", they implement the building blocks
+for measurements. Some of them are mandatory, many are optional and it is also
+possible to develop completely proprietary modules.
+
+There is one reference implementation: mapago (implemented in go, thus the
+name). A Python implementation is also available (but protocol support is based
+on older version of maparo). But you can - and should - program your own
+implementation in your language of choice. No matter if it is GUI or command
+line interface tool.
 
 **KEEP IN MIND:** maparo protocol is not finalized yet. We do our best not to
 change the existing specification, but we cannot rule it out.
