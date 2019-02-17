@@ -156,9 +156,6 @@ Name: `random`
 
 ## Control Protocol
 
-- [control-protocol.md](control-protocol.md)
-
-
 ### Essential Characteristics
 
 Each server - started with argument `remote` listening on a TCP _and_ UDP port
