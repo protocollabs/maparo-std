@@ -31,6 +31,33 @@ line interface tool.
 **KEEP IN MIND:** maparo protocol is not finalized yet. We do our best not to
 change the existing specification, but we cannot rule it out.
 
+## Introdcuction
+
+### Modules
+
+Modules can be manadory or optional. Modules itself can require mandatory
+featureset and provide an optional featureset.
+
+#### Mandatory Modules
+
+Mandatory module feature functionality MUST be able to implemented at any
+platform. Operating system specific features MUST NOT be required in a
+Mandatory Module.
+
+#### Optional Modules
+
+Blessed and officially released modules. Implementation can implement these
+modules if they want. If Optional Modulesa are implemented they MUST follow the
+specification.
+
+#### Unofficial Modules
+
+Possibility to implement propritary modules.
+
+### Time Format
+
+
+
 
 - [command-line-interface.md](command-line-interface.md)
 
