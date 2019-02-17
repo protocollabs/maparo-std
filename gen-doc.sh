@@ -14,6 +14,9 @@ cat time.md >> maparo-spec.md
 # convert to png
 sed -i '/.svg/d' maparo-spec.md
 
-pandoc maparo-spec.md --toc --pdf-engine=xelatex -o maparo-spec.pdf
+VERSION=$(git describe --always --dirty)
+ABSTRACT='A network performance measurement protocol specification. Beside iperf, netperf and other tools it just defines the protocol specification - not one particular implementation. Similar to HTTP/2 (RFC 7540) or any other networking protocol specification.'
+
+pandoc maparo-spec.md --toc --pdf-engine=xelatex -V abstract="$ABSTRACT"  -V version="$VERSION"  -V title="Maparo -- A Network Performance Measurement Protocol Specification"  --standalone --template assets/technical.tex -o maparo-spec.pdf
 
 rm -f maparo-spec.md

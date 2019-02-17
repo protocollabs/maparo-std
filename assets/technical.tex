@@ -1,0 +1,134 @@
+%!TEX TS-program = xelatex
+% see https://gist.github.com/michaelt/1017790
+\documentclass[
+  10pt,
+  parskip,
+  a4paper,
+  oneside,
+]{scrartcl}
+
+\usepackage[
+  %showframe,% Seitenlayout anzeigen
+  left=2cm,
+  right=2cm,
+  top=2.5cm,
+  bottom=4cm,
+]{geometry}
+
+
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\usepackage{fancyhdr}
+\pagestyle{plain}
+
+%\usepackage[toc]{multitoc}
+%\renewcommand*{\multicolumntoc}{2}
+%\setlength{\columnseprule}{0.5pt}
+
+
+\usepackage[T1]{fontenc}
+%\usepackage{iwona}
+%\usepackage{erewhon}
+%\usepackage{cmbright}
+%\usepackage{times}
+\usepackage{fourier}
+
+% inconsolata as monospace font - great
+\usepackage{inconsolata}
+
+\definecolor{MSBlue}{rgb}{.204,.353,.541}
+\definecolor{MSLightBlue}{rgb}{.31,.506,.741}
+
+% use standard font as section font
+%\setkomafont{disposition}{\normalcolor}
+%\setkomafont{disposition}{\color{MSBlue}}
+
+% remove section numbers
+\makeatletter
+\renewcommand{\@seccntformat}[1]{}
+\makeatother
+
+\usepackage{graphicx}
+% -- We will generate all images so they have a width \maxwidth. This means
+% -- that they will get their normal width if they fit onto the page, but
+% -- are scaled down if they would overflow the margins.
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+\else\Gin@nat@width\fi}
+\makeatother
+\let\Oldincludegraphics\includegraphics
+\renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=\maxwidth]{#1}}
+
+%\fancyhf{} % sets both header and footer to nothing
+%\renewcommand{\headrulewidth}{0pt}
+%\setlength\headheight{26pt}
+%\rhead{\Oldincludegraphics[width=\textwidth]{assets/logo.pdf}}
+
+% required for pandoc
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% dots are not displayed in TOC, add it now
+%\usepackage{tocloft}
+%\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+% don"t set in bfseries
+%\renewcommand{\cftsecfont}{\mdseries}
+%\renewcommand{\contentsname}{}
+
+% title, author and date specific section
+$if(title)$
+\title{$title$}
+$endif$
+\author{$for(author)$$author$$sep$\\$endfor$}
+$if(date)$
+\date{$date$}
+$endif$
+
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+\begin{document}
+
+\begin{titlepage}
+	%\begin{picture}(0,0)
+	%	\put(-45, -740){\Oldincludegraphics[width=0.95\paperwidth]{assets/artwork-technical-titlepage.pdf}}
+	%\end{picture}
+
+	\begin{flushleft}
+		{
+		\sffamily
+		.\\
+		\vspace{8.0cm}
+		{\Huge \color{MSBlue}\textbf{$title$}}\\
+		\vspace{.5cm}
+		\textit{
+			$abstract$\\
+			}
+		\vspace{2.0cm}
+		Version: $version$\\
+		\vspace{1.0cm}
+		Authors:\\
+	Hagen Pfeifer <hagen@jauu.net>\\
+	Simon Fronhöfer <simon@fronhoefer.de>\\
+		}
+
+	\vfill
+	\end{flushleft}
+
+\end{titlepage}
+
+% generate TOC only if title is given -> keep document tight
+$if(toc)$
+\setcounter{tocdepth}{2}
+\tableofcontents
+\newpage
+$endif$
+
+$body$
+\end{document}
