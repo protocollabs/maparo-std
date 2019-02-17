@@ -9,11 +9,11 @@ iperf, netperf and other tools it just defines the protocol
 specification - not one particular implementation. Similar to HTTP/2 (RFC 7540) or any
 other networking protocol specification.
 
-Maparo differiantiate between the control protocol (e.g. probe the server or
+Maparo differentiate between the control protocol (e.g. probe the server or
 start measurement) and the measurement protocol (e.g. tcp stream with sequence
-numbers). The later specification is done in seperate module specifcation.
+numbers). The later specification is done in separate module specification.
 
-Maparo was designed to be flexible and extensible. Maparo differiantiate
+Maparo was designed to be flexible and extensible. Maparo differentiate
 between the control protocol and the measurement protocol.  The control
 protocol is keep as simple as possible and provides a basis functionality like
 service discovery, measurement start request and so on. It provides the
@@ -31,12 +31,12 @@ line interface tool.
 **KEEP IN MIND:** maparo protocol is not finalized yet. We do our best not to
 change the existing specification, but we cannot rule it out.
 
-## Introdcuction
+## Introduction
 
 ### Modules
 
-Modules can be manadory or optional. Modules itself can require mandatory
-featureset and provide an optional featureset.
+Modules can be mandatory or optional. Modules itself can require mandatory
+feature set and provide an optional feature set.
 
 #### Mandatory Modules
 
@@ -44,15 +44,23 @@ Mandatory module feature functionality MUST be able to implemented at any
 platform. Operating system specific features MUST NOT be required in a
 Mandatory Module.
 
+Mandatory modules have a short name, words are separated by dash. E.g.
+`tcp-goodput`.
+
 #### Optional Modules
 
 Blessed and officially released modules. Implementation can implement these
-modules if they want. If Optional Modulesa are implemented they MUST follow the
+modules if they want. If Optional Modules are implemented they MUST follow the
 specification.
+
+Optional modules have a short name, words are separated by dash. E.g.
+`tcp-tls-goodput`.
 
 #### Unofficial Modules
 
-Possibility to implement propritary modules.
+Possibility to implement proprietary modules. Proprietary modules MUST start with
+a underscore (e.g. `_avian-test-protocol`). But unofficial modules SHOULD use a
+more unique name to avoid naming clashes: `_com-protocollabs-avian-test-protocol`.
 
 ### Time Format
 
@@ -1052,12 +1060,12 @@ All UDP features of nuttcp should be supported, e.g.: `nuttcp -l8972 -T30 -u
   # as well it is unambiguous.
   # Note that rate depends on the "packet-length" parameter.
   "rate" : "0"
-  
+
   # if rate is != 0 the rate-burst can be given. Normally the spacing between
   # packets is equal for a given calculated target rate. With burst given a burst
   # pattern can be given. These packets are transmitted without any pause.
   "rate-burst": "0"
-  
+
   # The packet size to be send. The default is 512 byte, IPv4/IPv6 as well as UDP
   # is not considered. This is just the payload size. 512 byte is considered safe:
   # assume IPv4 the "minimum maximum reassembly" buffer size is 576 byte as specified
@@ -1066,16 +1074,16 @@ All UDP features of nuttcp should be supported, e.g.: `nuttcp -l8972 -T30 -u
   # theoretical and 512 byte is fine.
   # To get line rate you probably want to increase this to jumbo mtu 9k/16k packet size.
   "packet-length" : "512"
-  
+
   # set the DSCP value, unmodified will not modify the default
   "dscp" : "unmodified"
-  
+
   # is OS default ttl
   "ttl" : "unmodified"
-  
+
   # Can be human or json
   "output-format" : "human"
-  
+
   # ordinary write systemcall is used for transfer data. This has no zero copy
   # optimization but it is safe on all operating systems.
   # "mmap-sendfile" and friends can later added.
