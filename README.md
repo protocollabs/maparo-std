@@ -38,6 +38,10 @@ change the existing specification, but we cannot rule it out.
 Modules can be mandatory or optional. Modules itself can require mandatory
 feature set and provide an optional feature set.
 
+- Mandatory Modules
+- Optional Modules
+- Unofficial Modules
+
 #### Mandatory Modules
 
 Mandatory module feature functionality MUST be able to implemented at any
