@@ -1035,52 +1035,51 @@ All UDP features of nuttcp should be supported, e.g.: `nuttcp -l8972 -T30 -u
   # }
   # in this file the port is part of this configuration, but the port is advertised
   # in the Meausrement Start Reply not Meausrement Start Request
-  # FIME: the server MUST dictate the port, because the port MAY
-	# be used by another service. See the mod-tcp-goodput.
-	# so the following is not wrong and must be updted
+  # FIXME: the server MUST dictate the port, because the port MAY
+  # be used by another service. See the mod-tcp-goodput.
+  # so the following is not wrong and must be updted
   # port for listening and sending. If worker is larger as 1 subsequent
-	# ports are used. E.g. 7001, 7002, ...
-	# "port" : "7000"
-
-	# payload pattern. Default is zeroized because we want to fullfill
-	# the pipe and offload as much as possible. 
-	"payload-pattern" : "zeroized"
-
-	# limits the outgoing rate. Normally this is unlimited (value "0"): mapago
-	# send as much data as possible without further configuration. The rate
-	# can be given in any SI/IEC prefix form: 23mbit, 23mibit, ... just everything
-	# as well it is unambiguous.
-	# Note that rate depends on the "packet-length" parameter.
-	"rate" : "0"
-
+  # ports are used. E.g. 7001, 7002, ...
+  # "port" : "7000"
+  
+  # payload pattern. Default is zeroized because we want to fullfill
+  # the pipe and offload as much as possible. 
+  "payload-pattern" : "zeroized"
+  
+  # limits the outgoing rate. Normally this is unlimited (value "0"): mapago
+  # send as much data as possible without further configuration. The rate
+  # can be given in any SI/IEC prefix form: 23mbit, 23mibit, ... just everything
+  # as well it is unambiguous.
+  # Note that rate depends on the "packet-length" parameter.
+  "rate" : "0"
+  
   # if rate is != 0 the rate-burst can be given. Normally the spacing between
-	# packets is equal for a given calculated target rate. With burst given a burst
-	# pattern can be given. These packets are transmitted without any pause.
-	"rate-burst": "0"
-
-	# The packet size to be send. The default is 512 byte, IPv4/IPv6 as well as UDP
-	# is not considered. This is just the payload size. 512 byte is considered safe:
-	# assume IPv4 the "minimum maximum reassembly" buffer size is 576 byte as specified
-	# in RFC 1122. Minus IPv4 header (20) byte and UDP header (8) byte 512 is fine. Note
-	# that due to IPv4 options the available payload can be smaller. But this is more
-	# theoretical and 512 byte is fine.
-	# To get line rate you probably want to increase this to jumbo mtu 9k/16k packet size.
-	"packet-length" : "512"
-
+  # packets is equal for a given calculated target rate. With burst given a burst
+  # pattern can be given. These packets are transmitted without any pause.
+  "rate-burst": "0"
+  
+  # The packet size to be send. The default is 512 byte, IPv4/IPv6 as well as UDP
+  # is not considered. This is just the payload size. 512 byte is considered safe:
+  # assume IPv4 the "minimum maximum reassembly" buffer size is 576 byte as specified
+  # in RFC 1122. Minus IPv4 header (20) byte and UDP header (8) byte 512 is fine. Note
+  # that due to IPv4 options the available payload can be smaller. But this is more
+  # theoretical and 512 byte is fine.
+  # To get line rate you probably want to increase this to jumbo mtu 9k/16k packet size.
+  "packet-length" : "512"
+  
   # set the DSCP value, unmodified will not modify the default
-	"dscp" : "unmodified"
-
+  "dscp" : "unmodified"
+  
   # is OS default ttl
-	"ttl" : "unmodified"
-
+  "ttl" : "unmodified"
+  
   # Can be human or json
-	"output-format" : "human"
-
+  "output-format" : "human"
+  
   # ordinary write systemcall is used for transfer data. This has no zero copy
-	# optimization but it is safe on all operating systems.
-	# "mmap-sendfile" and friends can later added.
-	"tx-method" : "write"
-
+  # optimization but it is safe on all operating systems.
+  # "mmap-sendfile" and friends can later added.
+  "tx-method" : "write"
 }
 ```
 
