@@ -170,7 +170,7 @@ The secret mechanism is comparable to SNMPv1 with the community string - not
 more.
 
 The server must response to each message - unique identified by the sequence
-number - exactly once. The server MUST not response multiple times to one
+number - exactly once. The server MUST NOT response multiple times to one
 sequence number. The client MUST NOT reuse the same sequence number again, the
 sequence number must always be incremented by the client at each transmission.
 
@@ -412,7 +412,7 @@ measurements.
   # a sender may send several request in a row. To address the right one
   # the reply host will send back the sequence number.
   #
-  # A receiver MUST answer to one equest exactly once.
+  # A receiver MUST answer to one request exactly once.
   #
   # Sequence numbers are message specific. For example: info request message
   # numbers start with 0, later module-start-request first packet also has
@@ -485,8 +485,8 @@ address if it is a multicast module or unicast if UDP unicast analysis.
   # re-generated at program start
   "id" : "hostname=uuid",
 
-	# A sender may send several request in a row.  # A receiver MUST answer to
-  # one equest exactly once.
+  # A sender may send several request in a row.
+  # A receiver MUST answer to one equest exactly once.
   #
   # Sequence numbers are message specific. For example: info request message
   # numbers start with 0, later module-start-request first packet also has
@@ -760,8 +760,8 @@ server MUST react in the following manner:
   # - "warn" if start was sucessfull BUT there not all parameter can be fullfilled
   #          then warn can be used to signal such a condition
   # - "failed" if the measurement cannot be started. Another usage: if the measurement-id
-	#            is already in use by this client. E.g. the client do not calculate a new
-	#            measurement-id, the server will response with a "failed" state too.
+  #            is already in use by this client. E.g. the client do not calculate a new
+  #            measurement-id, the server will response with a "failed" state too.
   "status" : "<status>"
 
   # a human readable error message WHY it failed. Can be
@@ -776,7 +776,7 @@ server MUST react in the following manner:
   # the module specific return value
   "data" = {
         # see protocol specific section, e.g.
-				# mod-tcp-goodput.md and "Measurement Start Reply"
+        # mod-tcp-goodput.md and "Measurement Start Reply"
   }
 }
 ```
@@ -979,7 +979,7 @@ E.g.
 	  {
 		"timestamp-first" : "<maparo-time>"
 		"timestamp-last"  : "<maparo-time>"
-		"received-bytes" :      "<uint64_t>"
+		"received-bytes"  : "<uint64_t>"
 		}
 	],
 }
