@@ -845,6 +845,10 @@ message on the console.
 The server SHOULD implement a guard time after which the server should accept a
 new module-start sequence.
 
+> Note: The implementation itself can choose between to measurement stop conditions:
+> a) Mission time: send Measurement Stop Request after a defined interval (i.e. 60 seconds).
+> b) Byte count: send Measurement Stop Request after a defined number of bytes. 
+
 
 ```
 {
@@ -1172,11 +1176,14 @@ default value.
 
 
 ## Optional Modules
-
+- [TCP TLS goodput (tcp-tls-goodput)](mod-tcp-tls-goodput.md)
 - [UDP RTT (udp-rtt)](mod-udp-rtt.md)
 - [UDP Ping (udp-ping)](mod-udp-ping.md)
 - [UDP Mcast Spray (udp-mcast-spray)](mod-udp-mcast-spray.md)
-- [UDP Goodput (udp-goodput)](mod-udp-goodput.md)
+- [QUIC throughput (quic-throughput)](mod-quic-throughput.md)
+
+
+
 
 > Common used modules are named shorter/snappy, rarely use modules named
 longer
