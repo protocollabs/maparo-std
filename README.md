@@ -1177,11 +1177,13 @@ default value.
 
 
 ## Optional Modules
-
+- [TCP TLS goodput (tcp-tls-goodput)](mod-tcp-tls-goodput.md)
+- [UDP RTT (udp-rtt)](mod-udp-rtt.md)
 - [UDP RTT (udp-rtt)](mod-udp-rtt.md)
 - [UDP Ping (udp-ping)](mod-udp-ping.md)
 - [UDP Mcast Spray (udp-mcast-spray)](mod-udp-mcast-spray.md)
-- [UDP Goodput (udp-goodput)](mod-udp-goodput.md)
+
+
 
 > Common used modules are named shorter/snappy, rarely use modules named
 longer
