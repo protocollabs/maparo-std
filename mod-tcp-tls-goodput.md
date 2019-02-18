@@ -48,7 +48,7 @@ E.g.
   "id" : "hostname=uuid",
   "seq-rp" : <uint64_t>
   "modules" : {
-     "tcp-tls-goodput" : { "cores" : "4" },
+     "tcp-tls-goodput" : { "cores" : <uint64_t> },
   }
 []
 ```
@@ -57,7 +57,7 @@ E.g.
 
 ```
 {
-	"streams" : "1"
+	"streams" : <uint64_t>
 }
 ```
 

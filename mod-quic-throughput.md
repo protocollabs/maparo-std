@@ -43,7 +43,7 @@ E.g.
 
 ```
 {
-	"streams" : "1"
+	"streams" : <uint64_t>
 }
 ```
 

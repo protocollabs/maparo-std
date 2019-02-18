@@ -848,7 +848,6 @@ new module-start sequence.
 > Note: The implementation itself can choose between to measurement stop conditions:
 > a) Mission time: send Measurement Stop Request after a defined interval (i.e. 60 seconds).
 > b) Byte count: send Measurement Stop Request after a defined number of bytes. 
-> Our Mapago implementation currently supports the misison time as a stop condition. The condition "byte count" is WIP.
 
 
 ```
