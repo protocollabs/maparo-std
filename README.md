@@ -359,10 +359,10 @@ Every maparo protocol message is encoded into two parts:
 
 - 4 bit preamble
 - 4 bit version field
-- 1 byte control message type
+- 1 byte type
 - 1 byte encoding
 - 1 byte reserved
-- 4 byte message length (network bytes order)
+- 4 byte message length
 
 #### Preamble
 
@@ -417,7 +417,7 @@ If a different encoding is received, the server SHOULD reply with an error messa
 1 byte reserved for further use. If a message is received with an reserved
 field `!= 0` the message MUST be discared.
 
-> This reserved field can later be used similar to the IPv6 Extension Header 
+> This reserved field can later be used similar to the IPv6 Extension Header
 > mechanism. To support features like fragmentation of control messages (needed
 > for unreliable UDP transport)
 
