@@ -347,31 +347,42 @@ Clients should implement a backoff for `module-start` requests to prevent storms
 
 ![image](images/control-mcast-discovery-dual-stack.svg)
 
-### Binary Encoded Header
+### Maparo Header
 
-The standard control protocol header is componsed of the following elements
-for **all** protocol headers:
+Every maparo protocol message is encoded into two parts:
+
+- binary encoded header of length 8 byte.
+- variable encoded control message, the concrete encoding/format is specified
+	by the header field *encoding*.
 
 ![image](images/control-header.svg)
 
-- 2 byte, `uint16_t`, unsigned, network byte order encoded **type**
-- 2 byte, n**reserved**
-- 4 byte, `uint32_t`, unsigned, network byte order encoded packet **length**
+- 4 bit preamble
+- 4 bit version field
+- 1 byte control message type
+- 1 byte encoding
+- 1 byte reserved
+- 4 byte message length (network bytes order)
 
-> The reserved field can be used later to signal LZMA compressed payload
-> or for enrypted control 
+#### Preamble
 
+The very first 4 bits of each message transport an "unique" identifier:
 
+- `b1011`
 
-#### Protocol Requirements
+If the first four differs, the packet MUST be discared.
 
-The very first four bytes of a packet must encode the control protocol type.
-The type has an associated encoding format (i.e. JSON). But this can be
-different.
+> The preamble serves as an guard to drop random packets received at a given
+> port to filter out martians.
+
+#### Version
+
+The version field MUST be `b0000` (0), for maparo version 0. If the packet
+encodes an different version the packet MUST be dropped.
 
 #### Protocol Types
 
-In `uint32_t`, network byte order, starting with 1, 0 is intentionally left
+In `uint8_t`, starting with 1, 0 is intentionally left
 blank:
 
 - `1`: info request
@@ -386,6 +397,35 @@ blank:
 - `10`: time-diff reply
 - `255`: warning and error message
 
+If a server receives an unknown protocol type it SHOULD answer with an error
+message where the unsupported protocol type if mentioned.
+
+#### Encoding
+
+8 bit field to specifiy the control message encoding:
+
+- `b00000000` JSON, uncompressed
+
+If a different encoding is received, the server SHOULD reply with an error message.
+
+> The encoding can later be used to compress the control message. E.g. JSON/LZMA.
+> For simplicity this is not specified yet. The gain to save a few bytes on the
+> control channel is not that demanding.
+
+#### Reserved
+
+1 byte reserved for further use. If a message is received with an reserved
+field `!= 0` the message MUST be discared.
+
+> This reserved field can later be used similar to the IPv6 Extension Header 
+> mechanism. To support features like fragmentation of control messages (needed
+> for unreliable UDP transport)
+
+
+#### Length
+
+The length of the whole message. Network bytes order encoded 4 bytes. Allows
+control messages of maximum 4GB.
 
 ### Messages
 
