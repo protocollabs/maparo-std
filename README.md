@@ -248,13 +248,22 @@ must be handled by the control plane.
 If a remote server receives a UDP multicast request, the reply must be a UDP
 unicast.  The unicast reply must address the sending IPv{4,6} address.
 
-It is possible that after a certain discovery phase (most likely INFO-REQUEST,
-INFO-REPLY) and the "most wanted" server is selected the addressing change
-from multicast to unicast adressing.
-
 > There is no need to send Time Diff request/reply probes to an multicast address
 > and filter the results later if several servers are within the multicast
 > domain.
+
+### Communication transition
+
+Related to the current phase (discovery phase / measurement phase) the communication
+strategy is predefined: During the discovery phase the communication on the control
+channel can happen via TCP, UDP and multicast. Ergo both unicast and multicast is supported.
+The control channel communication during the measurement phase itself is happening with reliable TCP only.
+Only unicast addressing is supported.
+
+> Implementationdetails: The mapago client uses separate TCP connections per discovery process
+> and measurement process. The mapago server is always closing the accepted socket
+> after a client request is processed. Then it waits for another client request.
+> Note: The multicast discovery is not fully functional.
 
 ### Control Address and Data Address
 
