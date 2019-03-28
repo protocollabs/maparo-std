@@ -997,28 +997,44 @@ tcp-goodput
 
 ##### Info Reply
 
-`tcp-goodput` has no additional information for the client. The `tcp-goodput`
-dictionary MUST be empty.
+Optionally `tcp-goodput` provides the following additional information for the
+client:
+
+- `streams-max`: the number of maximal allowed threads. NOTE: this value can be
+  larger as the available CPU cores.
+
 
 E.g.
 
 ```
 []
-  "id" : "hostname=uuid",
-  "seq-rp" : <uint64_t>
   "modules" : {
-     "tcp-goodput" : { "cores" : "4" },
+     "tcp-goodput" : { "streams-max" : "4" },
   }
 []
 ```
 
 ##### Measurement Start Request
 
+Following options are supported:
+
+- `streams`: number of requested streams. The server can reject and send an
+  error code if the number of requested streams is above a limit.
+- `socket-receive-buffer`: the number of bytes for the socket receive buffer.
+- `socket-send-buffer`: the number of bytes for the socket send buffer.
+
 ```
 {
-	"streams" : "1"
+  "streams" : <uint32_t>,
+  "socket-receive-buffer" : <uint32_t>,
+  "socket-send-buffer" : <uint32_t>,
 }
 ```
+
+> NOTE: the operating system may to refuse the buffer size request. For Linux
+> the default limit cat be read and set via `/proc/sys/net/core/wmem_max` for
+> send buffer and `/proc/sys/net/core/rmem_max` for the receive buffer.
+
 
 #### Measurement Start Reply
 
